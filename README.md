@@ -1,2 +1,12 @@
 # iot-sensor-events-showcase
-Showcase application for IoT Eventing monitoring and alerting
+
+
+## Start Postgres
+
+```shell
+brew services start postgresql&
+```
+
+```shell
+psql -d postgres -U postgres
+```
