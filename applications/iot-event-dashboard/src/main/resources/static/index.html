@@ -10,9 +10,9 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-    <link href='https://d1fto35gcfffzn.cloudfront.net/tanzu/favicon.ico' rel='shortcut icon' type='image/vnd.microsoft.icon'>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
     $(document).ready(function(){
@@ -177,9 +177,6 @@ div {
 
     function drawSensorOverview(sensorOverview)
     {
-        //alert("ALERT:"+sensorOverview);
-
-        //alert(sensorOverview.priority);
 
 
         if(typeof window[sensorOverview.id] !== 'undefined')
@@ -189,25 +186,27 @@ div {
         //alert("ALERT:"+sensorOverview.sensor);
 
 
-        if(sensorOverview.priority < 1)
-        {
-                window[sensorOverview.id] = L.marker([sensorOverview.sensor.location.latitude, sensorOverview.sensor.location.longitude]).addTo(mymap)
+        var greenIcon = L.icon({
+            iconUrl: 'img/green.png',
+            iconSize:     [38, 95], // size of the icon
+            shadowSize:   [50, 64], // size of the shadow
+            iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+
+
+               window[sensorOverview.id] = L.circle([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5,
+                    radius: 50000
+                }).addTo(mymap);
+
+              /*  window[sensorOverview.id] = L.marker([sensorOverview.sensor.location.latitude, sensorOverview.sensor.location.longitude], {icon: greenIcon}).addTo(mymap)
                 .bindPopup("<strong>vin:</strong>"+sensorOverview.id+"</br/>"
                         +" speed:"+sensorOverview.speed+"</br/>"
-                        +" odometer:"+sensorOverview.odometer+"</br/>");
-        }
-        else
-        {
-          //add with alerts
-            window[sensorOverview.id] = L.marker([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
-              icon: overheatingIcon
-            }).addTo(mymap)
-                .bindPopup("<strong>vin:</strong>"+sensorOverview.id+"</br/>"
-                        +" <strong style='color:red'>priority:</strong>"+sensorOverview.priority+"</br/>"
-                        +" latitude:"+sensorOverview.sensor.sensorLocation.latitude+"</br/>"
-                        +" longitude:"+sensorOverview.sensor.sensorLocation.longitude);
-
-        }
+                        +" odometer:"+sensorOverview.odometer+"</br/>");*/
 
 
     }
