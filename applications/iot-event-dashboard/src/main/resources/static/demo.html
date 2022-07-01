@@ -18,10 +18,13 @@
 
 
 
-<div id="mapid" style="width: 1000px; height: 800px;"></div>
+<div id="mapid" style="width: 400px; height: 400px;"></div>
 <script>
+
+    var zoomNumber = 3;
+
     // Set  create a map of the center of London
-	var mymap = L.map('mapid').setView([35.659807, -97.017174], 4);
+	var mymap = L.map('mapid').setView([38.469512, -99.242627], zoomNumber);
 
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamNiYWxvdSIsImEiOiJja204Y3Z5cjIwa2t1MndwOXhjMGVuMDN0In0.8h6HQJ_uvVKT2k5kVLTz_A', {
 		maxZoom: 18,

@@ -3,7 +3,7 @@
 <html>
 <head>
 
-    <title>Connected Vehicle Demo</title>
+    <title>Connected IoT Demo</title>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,9 +80,9 @@ div {
 
 	var popup = L.popup();
 
-    function saveVehicle()
+    function saveSensor()
     {
-       var vehicle = {
+       var sensor = {
         vin : document.getElementById("vin").value,
         speed : document.getElementById("speed").value,
         odometer : document.getElementById("odometer").value,
@@ -93,7 +93,7 @@ div {
         }
        };
 
-       if(vehicle.vin == null || vehicle.vin.length == 0)
+       if(sensor.id == null || sensor.id.length == 0)
        {
           var label = document.getElementById("vinLabel");
           label.innerHTML = "<span style='color:red;font-weight: bold;'>VIN (required)</span>";
@@ -103,13 +103,13 @@ div {
 
         $.ajax({
             type: 'post',
-            url: '/saveVehicle',
-            data: JSON.stringify(vehicle),
+            url: '/saveSensor',
+            data: JSON.stringify(sensor),
             contentType: "application/json; charset=utf-8",
             traditional: true,
             success: function (data) {
                 mymap.closePopup();
-                drawVehicle(vehicle);
+                drawSensor(sensor);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("ERROR: " + JSON.stringify(XMLHttpRequest.responseJSON));
@@ -143,7 +143,7 @@ div {
                 "    <label for=\"lng\">lng</label>\n" +
                 "    <input type=\"text\" id=\"lng\" name=\"lng\" value=\""+latlng.lng+"\">\n" +
                 "  \n" +
-                "    <input type=\"button\" value=\"Save\" onclick='saveVehicle();return false;'>\n" +
+                "    <input type=\"button\" value=\"Save\" onclick='saveSensor();return false;'>\n" +
                 "  </form>";
 
          return formHtml;
@@ -167,41 +167,45 @@ div {
             iconSize: [18, 35],
         });
 
-    var source = new EventSource("/updates");
+    var source = new EventSource("/streamOverviewEvents-sse");
     source.onmessage = function(event) {
 
-      var vehicle = JSON.parse(event.data)
+      var sensor = JSON.parse(event.data)
 
-      drawVehicle(vehicle);
+      drawSensorOverview(sensor);
     };
 
-    function drawVehicle(vehicle)
+    function drawSensorOverview(sensorOverview)
     {
+        //alert("ALERT:"+sensorOverview);
 
-        if(typeof window[vehicle.vin] !== 'undefined')
+        //alert(sensorOverview.priority);
+
+
+        if(typeof window[sensorOverview.id] !== 'undefined')
         {
-            window[vehicle.vin].remove();
+            window[sensorOverview.id].remove();
         }
+        //alert("ALERT:"+sensorOverview.sensor);
 
-        if(vehicle.temperature < 220)
+
+        if(sensorOverview.priority < 1)
         {
-                window[vehicle.vin] = L.marker([vehicle.gpsLocation.latitude, vehicle.gpsLocation.longitude]).addTo(mymap)
-                .bindPopup("<strong>vin:</strong>"+vehicle.vin+"</br/>"
-                        +" speed:"+vehicle.speed+"</br/>"
-                        +" odometer:"+vehicle.odometer+"</br/>");
+                window[sensorOverview.id] = L.marker([sensorOverview.sensor.location.latitude, sensorOverview.sensor.location.longitude]).addTo(mymap)
+                .bindPopup("<strong>vin:</strong>"+sensorOverview.id+"</br/>"
+                        +" speed:"+sensorOverview.speed+"</br/>"
+                        +" odometer:"+sensorOverview.odometer+"</br/>");
         }
         else
         {
-          //add with overheating
-            window[vehicle.vin] = L.marker([vehicle.gpsLocation.latitude, vehicle.gpsLocation.longitude], {
+          //add with alerts
+            window[sensorOverview.id] = L.marker([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
               icon: overheatingIcon
             }).addTo(mymap)
-                .bindPopup("<strong>vin:</strong>"+vehicle.vin+"</br/>"
-                        +" speed:"+vehicle.speed+"</br/>"
-                        +" <strong style='color:red'>temperature:</strong>"+vehicle.temperature+"</br/>"
-                        +" odometer:"+vehicle.odometer+"</br/>"
-                        +" latitude:"+vehicle.gpsLocation.latitude+"</br/>"
-                        +" longitude:"+vehicle.gpsLocation.longitude);
+                .bindPopup("<strong>vin:</strong>"+sensorOverview.id+"</br/>"
+                        +" <strong style='color:red'>priority:</strong>"+sensorOverview.priority+"</br/>"
+                        +" latitude:"+sensorOverview.sensor.sensorLocation.latitude+"</br/>"
+                        +" longitude:"+sensorOverview.sensor.sensorLocation.longitude);
 
         }
 
@@ -209,7 +213,7 @@ div {
     }
 </script>
 
-<!--<button onclick="drawVehicle(null);">testing</button>-->
+<!--<button onclick="drawSensorOverview(null);">testing</button>-->
 
 
 </body>
