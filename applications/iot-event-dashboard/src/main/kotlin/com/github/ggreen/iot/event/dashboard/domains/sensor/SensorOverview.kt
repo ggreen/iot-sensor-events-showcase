@@ -1,4 +1,4 @@
-package com.github.ggreen.iot.event.dashboard.domains
+package com.github.ggreen.iot.event.dashboard.domains.sensor
 
 data class SensorOverview(var id : String = "",
                           var status : Short = 0,

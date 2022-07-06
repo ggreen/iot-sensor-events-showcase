@@ -1,4 +1,4 @@
-package com.github.ggreen.iot.event.dashboard.domains
+package com.github.ggreen.iot.event.dashboard.domains.sensor
 
 import java.time.LocalDateTime
 
