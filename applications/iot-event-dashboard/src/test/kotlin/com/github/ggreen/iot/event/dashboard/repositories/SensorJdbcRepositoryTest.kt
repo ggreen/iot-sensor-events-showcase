@@ -1,4 +1,4 @@
-package com.github.ggreen.iot.event.dashboard.services
+package com.github.ggreen.iot.event.dashboard.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.ggreen.iot.event.dashboard.domains.sensor.SensorOverview
@@ -13,7 +13,7 @@ import org.mockito.kotlin.whenever
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 
-internal class SensorJdbcDataServiceTest{
+internal class SensorJdbcRepositoryTest{
     private lateinit var template: JdbcTemplate
 
     @BeforeEach
@@ -34,7 +34,7 @@ internal class SensorJdbcDataServiceTest{
             .thenReturn(expected)
 
 
-        var subject = SensorJdbcDataService(template)
+        var subject = SensorJdbcRepository(template)
 
         val actual = subject.findSensorOverviews()
 

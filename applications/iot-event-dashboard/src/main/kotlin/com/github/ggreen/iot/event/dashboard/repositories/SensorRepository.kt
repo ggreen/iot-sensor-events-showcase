@@ -1,7 +1,7 @@
-package com.github.ggreen.iot.event.dashboard.services
+package com.github.ggreen.iot.event.dashboard.repositories
 
 import com.github.ggreen.iot.event.dashboard.domains.sensor.SensorOverview
 
-interface ISensorDataService{
+interface SensorRepository{
     fun findSensorOverviews(): Iterable<SensorOverview>
 }

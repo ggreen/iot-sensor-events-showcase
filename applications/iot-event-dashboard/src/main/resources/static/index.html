@@ -63,7 +63,7 @@ div {
 
     var zoomNumber = 3;
 
-    // Set  create a map of the center of London
+    // Set  create a map of the center of US
 	var mymap = L.map('mapid').setView([35.659807, -97.017174], zoomNumber);
 
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamNiYWxvdSIsImEiOiJja204Y3Z5cjIwa2t1MndwOXhjMGVuMDN0In0.8h6HQJ_uvVKT2k5kVLTz_A', {
@@ -82,82 +82,12 @@ div {
 
 	var popup = L.popup();
 
-    function saveSensor()
-    {
-       var sensor = {
-        vin : document.getElementById("vin").value,
-        speed : document.getElementById("speed").value,
-        odometer : document.getElementById("odometer").value,
-        temperature : document.getElementById("temperature").value,
-        gpsLocation : {
-            latitude : document.getElementById("lat").value,
-            longitude : document.getElementById("lng").value
-        }
-       };
-
-       if(sensor.id == null || sensor.id.length == 0)
-       {
-          var label = document.getElementById("vinLabel");
-          label.innerHTML = "<span style='color:red;font-weight: bold;'>VIN (required)</span>";
-          return false;
-       }
-
-
-        $.ajax({
-            type: 'post',
-            url: '/saveSensor',
-            data: JSON.stringify(sensor),
-            contentType: "application/json; charset=utf-8",
-            traditional: true,
-            success: function (data) {
-                mymap.closePopup();
-                drawSensor(sensor);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("ERROR: " + JSON.stringify(XMLHttpRequest.responseJSON));
-
-            }
-        });
-
-
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(mymap);
     }
-    //-------------------------------------------
-
-	function constructFormHtml(latlng)
-	{
-         //Form HTML
-        var formHtml  = "<form>\n" +
-                "    <label for=\"vin\" id=\"vinLabel\">VIN</label>\n" +
-                "    <input type=\"text\" id=\"vin\" name=\"vin\" placeholder=\"VIN..\">\n" +
-                "\n" +
-                "    <label for=\"odometer\">Odometer</label>\n" +
-                "    <input type=\"text\" id=\"odometer\" name=\"odometer\" placeholder=\"odometer..\">\n" +
-                "\n" +
-                "    <label for=\"speed\">Speed</label>\n" +
-                "    <input type=\"text\" id=\"speed\" name=\"speed\" placeholder=\"speed..\">\n" +
-                "  \n" +
-                "    <label for=\"temperature\">Temperature</label>\n" +
-                "    <input type=\"text\" id=\"temperature\" name=\"temperature\" placeholder=\"temperature..\">\n" +
-                "\n" +
-                "    <label for=\"lat\">lat</label>\n" +
-                "    <input type=\"text\" id=\"lat\" name=\"lat\" value=\""+latlng.lat+"\">\n" +
-                "  \n" +
-                "    <label for=\"lng\">lng</label>\n" +
-                "    <input type=\"text\" id=\"lng\" name=\"lng\" value=\""+latlng.lng+"\">\n" +
-                "  \n" +
-                "    <input type=\"button\" value=\"Save\" onclick='saveSensor();return false;'>\n" +
-                "  </form>";
-
-         return formHtml;
-	}//------------------------------------------------------------
-
-
-	function onMapClick(e) {
-		popup
-			.setLatLng(e.latlng)
-			.setContent(constructFormHtml(e.latlng))
-			.openOn(mymap);
-	}
 
 	mymap.on('click', onMapClick);
 
@@ -185,7 +115,6 @@ div {
         {
             window[sensorOverview.id].remove();
         }
-        //alert("ALERT:"+sensorOverview.sensor);
 
 
         var greenIcon = L.icon({
@@ -197,18 +126,25 @@ div {
             popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
         });
 
+        var sensorColor = 'green';
 
-               window[sensorOverview.id] = L.circle([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
-                    color: 'red',
+        if(sensorOverview.priority == 1)
+        {
+            sensorColor = 'orange';
+         }
+         else if(sensorOverview.priority > 1)
+         {
+            sensorColor = 'red';
+         }
+
+
+         window[sensorOverview.id] = L.circle([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
+                    color: sensorColor,
                     fillColor: '#f03',
-                    fillOpacity: 0.5,
+                    fillOpacity: 0.05,
                     radius: 50000
-                }).addTo(mymap);
+         }).addTo(mymap);
 
-              /*  window[sensorOverview.id] = L.marker([sensorOverview.sensor.location.latitude, sensorOverview.sensor.location.longitude], {icon: greenIcon}).addTo(mymap)
-                .bindPopup("<strong>vin:</strong>"+sensorOverview.id+"</br/>"
-                        +" speed:"+sensorOverview.speed+"</br/>"
-                        +" odometer:"+sensorOverview.odometer+"</br/>");*/
 
 
     }

@@ -1,9 +1,8 @@
-package com.github.ggreen.iot.event.dashboard.services
+package com.github.ggreen.iot.event.dashboard.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.ggreen.iot.event.dashboard.domains.sensor.SensorOverview
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Service
 import java.sql.ResultSet
 
@@ -11,7 +10,7 @@ import java.sql.ResultSet
  * @author Gregory Green
  */
 @Service
-class SensorJdbcDataService(private val template: JdbcTemplate) : ISensorDataService {
+class SensorJdbcRepository(private val template: JdbcTemplate) : SensorRepository {
     private val objectMapper = ObjectMapper()
 
     override fun findSensorOverviews(): Iterable<SensorOverview> {
