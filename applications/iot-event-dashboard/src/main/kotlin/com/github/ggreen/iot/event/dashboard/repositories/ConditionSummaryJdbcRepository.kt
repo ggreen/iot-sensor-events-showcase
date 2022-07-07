@@ -2,6 +2,7 @@ package com.github.ggreen.iot.event.dashboard.repositories
 
 import com.github.ggreen.iot.event.dashboard.domains.analytics.ConditionSummaries
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
 
@@ -34,4 +35,33 @@ class ConditionSummaryJdbcRepository(private val template: JdbcTemplate) : Condi
         }
         return template.query(sql,extractor)
     }
+
+    /**
+     * @return the summaries with normal, warning and severe totals
+     */
+    override fun findConditionSummariesGroupNyName(): Iterable<ConditionSummaries>? {
+
+        var sql = """
+            select
+              totals_sensor_name.label label,
+              (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and data#>>'{priority}' = '0') normal_count,
+              (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and data#>>'{priority}' = '1') warning_count,
+              (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and cast(data#>>'{priority}' as int) > 2) severe_count
+            from
+                (select count(*) total_count,data#>>'{sensor,name}' label   
+                from sensor_record  group by  data#>>'{sensor,name}') totals_sensor_name
+            order by label;
+        """.trimIndent()
+
+        val rowMapper = { rs:ResultSet, rowNum:Int ->
+            ConditionSummaries( label = rs.getString("label"),
+                                normalCount =  rs.getInt("normal_count"),
+                                warningCount = rs.getInt("warning_count"),
+                                severeCount = rs.getInt("severe_count")
+            )}
+
+            return template.query(sql,rowMapper)
+    }
+
+
 }

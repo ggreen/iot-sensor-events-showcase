@@ -3,7 +3,6 @@ package com.github.ggreen.iot.event.dashboard.controllers
 import com.github.ggreen.iot.event.dashboard.domains.analytics.ConditionSummaries
 import com.github.ggreen.iot.event.dashboard.repositories.ConditionSummaryRepository
 import org.springframework.http.codec.ServerSentEvent
-import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
@@ -20,9 +19,21 @@ class SensorConditionSummariesSseController(private val repository: ConditionSum
         return Flux.interval(Duration.ofSeconds(1))
             .map<ServerSentEvent<ConditionSummaries>> { sequence: Long ->
 
-                var builder = ServerSentEvent.builder<ConditionSummaries>()
+                val builder = ServerSentEvent.builder<ConditionSummaries>()
                 builder.id(sequence.toString())
                 builder.data(repository.findTotalConditionSummaries())
+                builder.build()
+            }
+    }
+
+    @GetMapping("/summariesGroupBy-sse")
+    fun summariesGroupBy(): Flux<ServerSentEvent<Iterable<ConditionSummaries>>>? {
+        return Flux.interval(Duration.ofSeconds(1))
+            .map<ServerSentEvent<Iterable<ConditionSummaries>>> { sequence: Long ->
+
+                val builder = ServerSentEvent.builder<Iterable<ConditionSummaries>>()
+                builder.id(sequence.toString())
+                builder.data(repository.findConditionSummariesGroupNyName())
                 builder.build()
             }
     }

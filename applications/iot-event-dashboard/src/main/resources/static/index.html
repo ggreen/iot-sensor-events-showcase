@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
 
     <title>IoT Demo</title>
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
-
+    <script src="js/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
     $(document).ready(function(){
@@ -73,12 +73,10 @@ div {
                             <th>Sensor</th>
                             <th colspan="3">Overview</th>
                         </tr>
-                        <tr>
-                            <td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td>
-                        </tr>
-                        <tr>
-                            <td>Water Levels</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td>
-                        </tr>
+                    <tbody id="summariesGroupBySourceTableBody">
+<!--                        <tr><td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td></tr>-->
+                    </tbody>
+
                 </table>
             </td>
         </tr>
@@ -189,7 +187,7 @@ div {
 
 
 <script>
-    // Charts
+    // Charts Totals Count
     const data = {
       labels: [
         'normal',
@@ -242,6 +240,35 @@ div {
         totalCountText.innerHTML = conditionOverview.totalCount;
     }
     //------------------
+</script>
+
+<script>
+    // summariesGroupBy
+    var summariesGroupBySource = new EventSource("/summariesGroupBy-sse");
+    summariesGroupBySource.onmessage = function(event) {
+
+      var summariesGroupBys = JSON.parse(event.data)
+
+      for (const summariesGroupBy of summariesGroupBys)
+      {
+        drawSummariesGroupBy(summariesGroupBy);
+      }
+
+    };
+
+    function drawSummariesGroupBy(conditionOverview)
+    {
+
+       if(document.getElementById("summary-for-"+conditionOverview.label) != null)
+          return; //already exists
+
+      //Add ROW
+      //<tr><td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td></tr>
+      var row = "<tr id='summary-for-"+conditionOverview.label+"'><td>"+conditionOverview.label+"</td><td class='priority0'>"+conditionOverview.normalCount+"</td><td class='priority1'>"+conditionOverview.warningCount+"</td><td class='priority2'>"+conditionOverview.severeCount+"</td></tr>";
+
+
+       $("#summariesGroupBySourceTableBody").append(row);
+    }
 </script>
 
 

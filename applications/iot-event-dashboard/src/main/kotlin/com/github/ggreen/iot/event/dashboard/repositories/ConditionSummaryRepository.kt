@@ -4,4 +4,6 @@ import com.github.ggreen.iot.event.dashboard.domains.analytics.ConditionSummarie
 
 interface ConditionSummaryRepository {
     fun findTotalConditionSummaries() : ConditionSummaries?
+
+     fun findConditionSummariesGroupNyName(): Iterable<ConditionSummaries>?
 }

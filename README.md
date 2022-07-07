@@ -31,11 +31,22 @@ insert into sensor_record (id,DATA)
 values ('2','{"id":"2","status":1,"priority":1,"sensor":{"id":"2","name":"Air Quality","sensorLocation":{"locationName":"LA","latitude":33.998027,"longitude":-118.212891}}}');
 ```
 
+Counts by Sensor Types
 ```sqlite-psql
-select count(*),cast( data#>'{sensor,name}' as text) as label  from sensor_record  group by  data#>'{sensor,name}';
+
+select
+  totals_sensor_name.label label,
+  (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and data#>>'{priority}' = '0') normal_count,
+  (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and data#>>'{priority}' = '1') warning_count,
+  (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and cast(data#>>'{priority}' as int) > 2) severe_count
+from
+    (select count(*) total_count,data#>>'{sensor,name}' label   
+    from sensor_record  group by  data#>>'{sensor,name}') totals_sensor_name
+order by label;
 
 ```
 
+Example query summaries 
 
 ```sqlite-psql
 
