@@ -56,36 +56,9 @@ div {
 }
 </style>
 <body>
-<script>
-// Charts
-const data = {
-  labels: [
-    'normal',
-    'warning',
-    'severe'
-  ],
-  datasets: [{
-    label: 'Sensor counts',
-    data: [300, 50, 100],
-    backgroundColor: [
-      'green',
-      'orange',
-      'red'
-    ],
-    hoverOffset: 4
-  }]
-};
-
-const config = {
-  type: 'doughnut',
-  data: data,
-};
-
-</script>
-
-<div class="w3-main>
+<div class="w3-main">
     <!--<h1>IOT Data Services Showcase</h1>-->
-    <h5><b><i class="fa fa-dashboard"></i> IoT Dashboard</b></h5>
+    <h5 class="fa fa-dashboard">IoT Dashboard</h5>
     <hr/>
     <table>
         <tr>
@@ -111,7 +84,7 @@ const config = {
         </tr>
     </table>
     <p>
-        Total Sensor # 400
+        Total Sensor # <span id="totalCountText"></span>
     </p>
     <!-- =================================== -->
     <hr/>
@@ -155,13 +128,11 @@ const config = {
 </script>
 
 <script language="JavaScript">
-    var overheatingIcon = L.icon({
-            iconUrl: 'img/overheating.png',
-            iconSize: [18, 35],
-        });
 
-    var source = new EventSource("/streamOverviewEvents-sse");
-    source.onmessage = function(event) {
+
+    // Map Overview Sensor
+    var streamOverviewSource = new EventSource("/streamOverviewEvents-sse");
+    streamOverviewSource.onmessage = function(event) {
 
       var sensors = JSON.parse(event.data)
 
@@ -213,17 +184,64 @@ const config = {
 
          //window[sensorOverview.id].addTo(mymap);
 
-
-
     }
 </script>
 
 
 <script>
+    // Charts
+    const data = {
+      labels: [
+        'normal',
+        'warning',
+        'severe'
+      ],
+      datasets: [{
+        label: 'Sensor counts',
+        data: [300, 50, 100],
+        backgroundColor: [
+          'green',
+          'orange',
+          'red'
+        ],
+        hoverOffset: 4
+      }]
+    };
+
+    const config = {
+      type: 'doughnut',
+      data: data,
+    };
+
   const myChart = new Chart(
     document.getElementById('myChart'),
     config
   );
+
+
+   var conditionSummariesSource = new EventSource("/summaries-sse");
+    conditionSummariesSource.onmessage = function(event) {
+
+      var conditionOverview = JSON.parse(event.data)
+      drawConditionOverview(conditionOverview);
+    };
+
+    function drawConditionOverview(conditionOverview)
+    {
+       myChart.data.datasets[0].data = [
+        conditionOverview.normalCount,
+        conditionOverview.warningCount,
+        conditionOverview.severeCount
+       ];
+
+
+      myChart.update();
+
+       //Update Total
+        var totalCountText =  document.getElementById("totalCountText");
+        totalCountText.innerHTML = conditionOverview.totalCount;
+    }
+    //------------------
 </script>
 
 
