@@ -83,40 +83,43 @@ const config = {
 
 </script>
 
-<h1>IOT Data Services Showcase</h1>
+<div class="w3-main>
+    <!--<h1>IOT Data Services Showcase</h1>-->
+    <h5><b><i class="fa fa-dashboard"></i> IoT Dashboard</b></h5>
+    <hr/>
+    <table>
+        <tr>
+            <td>
+                <div style="width: 140px; height: 140px; background-color: white;">
+                    <canvas  id="myChart"></canvas>
+                </div>
+            </td>
+            <td>
+                <table id="sensorStateCounts">
+                        <tr>
+                            <th>Sensor</th>
+                            <th colspan="3">Overview</th>
+                        </tr>
+                        <tr>
+                            <td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td>
+                        </tr>
+                        <tr>
+                            <td>Water Levels</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td>
+                        </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>
+        Total Sensor # 400
+    </p>
+    <!-- =================================== -->
+    <hr/>
 
-<p>
-    Total Sensor # 400
-</p>
-<hr/>
-<table>
-    <tr>
-        <td>
-            <div style="width: 140px; height: 140px; background-color: white;">
-                <canvas  id="myChart"></canvas>
-            </div>
-        </td>
-        <td>
-            <table id="sensorStateCounts">
-                    <tr>
-                        <th>Sensor</th>
-                        <th colspan="3">Overview</th>
-                    </tr>
-                    <tr>
-                        <td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td>
-                    </tr>
-                    <tr>
-                        <td>Water Levels</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td>
-                    </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-<!-- =================================== -->
-<hr/>
 
+    <div id="mapid" style="width: 400px; height: 400px;"></div>
+</div>
 
-<div id="mapid" style="width: 400px; height: 400px;"></div>
 <script>
 
     var zoomNumber = 3;
