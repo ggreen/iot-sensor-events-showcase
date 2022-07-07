@@ -15,21 +15,16 @@ import java.time.Duration
 class SensorOverviewSseController(private val sensorDataService: SensorRepository) {
 
     @GetMapping("/streamOverviewEvents-sse")
-    fun streamOverviewEvents(): Flux<ServerSentEvent<SensorOverview>>? {
+    fun streamOverviewEvents(): Flux<ServerSentEvent<Iterable<SensorOverview>>>? {
         return Flux.interval(Duration.ofSeconds(1))
-            .map<ServerSentEvent<SensorOverview>> { sequence: Long ->
+            .map<ServerSentEvent<Iterable<SensorOverview>>> { sequence: Long ->
 
-                var builder = ServerSentEvent.builder<SensorOverview>()
+                var builder = ServerSentEvent.builder<Iterable<SensorOverview>>()
                 builder.id(sequence.toString())
 
-                var sensorOverviews = sensorDataService.findSensorOverviews()
+                builder.data(sensorDataService.findSensorOverviews())
 
-                for (overview: SensorOverview in sensorOverviews) {
-                    builder.data(overview)
-                }
-
-                builder.build()
-
+                 builder.build()
             }
     }
 }

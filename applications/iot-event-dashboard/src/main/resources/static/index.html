@@ -102,18 +102,20 @@ div {
     var source = new EventSource("/streamOverviewEvents-sse");
     source.onmessage = function(event) {
 
-      var sensor = JSON.parse(event.data)
+      var sensors = JSON.parse(event.data)
 
-      drawSensorOverview(sensor);
+      for (const sensor of sensors)
+      {
+        drawSensorOverview(sensor);
+      }
     };
 
     function drawSensorOverview(sensorOverview)
     {
 
-
         if(typeof window[sensorOverview.id] !== 'undefined')
         {
-            window[sensorOverview.id].remove();
+            window['s'+sensorOverview.id].remove();
         }
 
 
@@ -137,13 +139,18 @@ div {
             sensorColor = 'red';
          }
 
-
-         window[sensorOverview.id] = L.circle([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
+         var circleObject = L.circle([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
                     color: sensorColor,
                     fillColor: '#f03',
                     fillOpacity: 0.05,
                     radius: 50000
-         }).addTo(mymap);
+         });
+
+         circleObject.addTo(mymap);
+
+         window['s'+sensorOverview.id] = circleObject;
+
+         //window[sensorOverview.id].addTo(mymap);
 
 
 
