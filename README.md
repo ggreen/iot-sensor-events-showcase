@@ -32,15 +32,17 @@ values ('2','{"id":"2","status":1,"priority":1,"sensor":{"id":"2","name":"Air Qu
 ```
 
 ```sqlite-psql
-select count(*),'Total' as label  from sensor_record
-union
 select count(*),cast( data#>'{sensor,name}' as text) as label  from sensor_record  group by  data#>'{sensor,name}';
 
 ```
 
 
 ```sqlite-psql
-select count(*),'Normal'::text as label  from sensor_record where cast(data#>'{priority}' as int) = 0; 
+
+select (select count(id) from sensor_record) total_count,
+       (select count(id)  from sensor_record where cast(data#>'{priority}' as int) = 0) normal_count,
+       (select count(id)  from sensor_record where cast(data#>'{priority}' as int) = 1) warning_count,
+       (select count(id)  from sensor_record where cast(data#>'{priority}' as int) > 1) severe_count
 
 ```
 
