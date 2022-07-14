@@ -1,2 +1,3 @@
 rootProject.name = 'iot-sensor-events-showcase'
 include 'applications:iot-event-dashboard'
+include 'applications:rabbit-stream-gemfire-cq-processor'
