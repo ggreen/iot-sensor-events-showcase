@@ -1,0 +1,39 @@
+server.port: 0
+stream:
+  sql:
+    - INSERT INTO sensor_alerts (sensor_id, sensor_name,alert_cnt) VALUES(:id,:name,1)
+      ON CONFLICT ON CONSTRAINT sensor_alerts_pkey
+      DO
+      UPDATE SET alert_cnt = (select alert_cnt+1 from sensor_alerts nested_sq where nested_sq.sensor_id = :id);
+    - UPDATE sensor_record set data = jsonb_set(data,array['priority'],(SELECT CASE
+      WHEN (select alert_cnt from sensor_alerts where sensor_id = :id)  < 10 THEN '0'
+      WHEN (select alert_cnt from sensor_alerts where sensor_id = :id)  < 200 THEN '1'
+      ELSE '0'
+      END AS PRIORITY_ID)::jsonb) where id = :id;
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: security
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    baselineOnMigrate: false
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: postgres
+    password: security
+  r2dbc:
+    url:
+    username: postgres
+    password: security
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+  application:
+    name: jdbc-batch-upsert-rabbit-stream-sink
+postgres:
+  host: localhost
+  database: postgres
+  username: postgres
+  password: security

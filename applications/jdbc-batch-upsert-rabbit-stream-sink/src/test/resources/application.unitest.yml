@@ -1,0 +1,10 @@
+app.updateSql: select * from blackAt.member
+app.insertSql: INSERT INTO blackAt.members (MEMBER_ID, MEMBER_NM) VALUES ('Cardinal', 'Tom B. Erichsen');
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        input:
+          binder: rabbit
+
