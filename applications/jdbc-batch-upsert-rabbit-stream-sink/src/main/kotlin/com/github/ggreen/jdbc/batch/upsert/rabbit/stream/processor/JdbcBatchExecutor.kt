@@ -5,6 +5,7 @@ import com.github.ggreen.jdbc.batch.upsert.rabbit.stream.config.SqlProperties
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 
 /**
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Component
  * @author Gregory Green
  */
 @Component
-class JdbcBatchProcessor(private val template: NamedParameterJdbcTemplate, private val sqls: SqlProperties) {
+@Transactional
+class JdbcBatchExecutor(private val template: NamedParameterJdbcTemplate, private val sqls: SqlProperties) {
 
     private val objectMapper = ObjectMapper()
 
@@ -24,16 +26,16 @@ class JdbcBatchProcessor(private val template: NamedParameterJdbcTemplate, priva
      * Execute SQLs in batch using the NamedParameterJdbcTemplate for the map
      * version of the JSON binary payload
      */
-    fun executeBatch(payloadJson: ByteArray): List<Int> {
-        var map : Map<String, Any> = objectMapper.readValue(payloadJson,Map::class.java) as Map<String, Any>
+     fun executeBatch(payloadJson: ByteArray): List<Int> {
+        val map : Map<String, Any> = objectMapper.readValue(payloadJson,Map::class.java) as Map<String, Any>
 
         log.info("Input MAP:$map")
 
-        var returns : MutableList<Int> = mutableListOf<Int>()
+        val returns : MutableList<Int> = mutableListOf<Int>()
         for(sql in sqls.sql)
         {
             log.info("Executing SQL $sql")
-            var result = template.update(sql,map)
+            val result = template.update(sql,map)
 
             log.info("Adding result $result")
             returns.add(result)

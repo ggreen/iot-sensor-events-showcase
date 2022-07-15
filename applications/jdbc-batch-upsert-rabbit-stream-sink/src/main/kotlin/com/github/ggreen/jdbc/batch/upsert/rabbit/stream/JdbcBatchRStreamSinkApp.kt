@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class JdbcBatchUpsertRStreamApp
+class JdbcBatchRStreamSinkApp
 
 fun main(args: Array<String>) {
-	runApplication<JdbcBatchUpsertRStreamApp>(*args)
+	runApplication<JdbcBatchRStreamSinkApp>(*args)
 }

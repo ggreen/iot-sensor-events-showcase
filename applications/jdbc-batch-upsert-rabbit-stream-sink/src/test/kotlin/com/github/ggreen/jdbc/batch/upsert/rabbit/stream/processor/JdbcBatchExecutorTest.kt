@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
-internal class JdbcBatchProcessorTest{
+internal class JdbcBatchExecutorTest{
 
     private lateinit var sqls: SqlProperties
     private lateinit var template: NamedParameterJdbcTemplate
@@ -24,7 +24,7 @@ internal class JdbcBatchProcessorTest{
 
     @Test
     internal fun given_bytePayload_whenEvent_thenExecuteBatch() {
-        var subject = JdbcBatchProcessor(template,sqls)
+        var subject = JdbcBatchExecutor(template,sqls)
         val expected = sqls.sql.size
 
         val payload = """

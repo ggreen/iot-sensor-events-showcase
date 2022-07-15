@@ -1,6 +1,6 @@
-package com.github.ggreen.rabbit.gemfire.cq
+package com.github.ggreen.jdbc.batch.upsert.rabbit.stream
 
-import com.github.ggreen.rabbit.gemfire.cq.processor.GemFireSaveConsumer
+import com.github.ggreen.jdbc.batch.upsert.rabbit.stream.processor.JdbcBatchExecutor
 import com.rabbitmq.stream.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration
  * @author Gregory Green
  */
 @Configuration
-class RabbitConfig {
+class RabbitStreamSinkConfig {
+
+
     @Value("\${spring.application.name}")
     private val applicationName: String ="rabbit-stream-gemfire-cq-processor"
 
@@ -21,10 +23,8 @@ class RabbitConfig {
     private val port: Int = 5552
 
     @Value("\${rabbitmq.stream.in}")
-    private val consumerStream: String = ""
+    private val sinkStream: String = ""
 
-    @Value("\${rabbitmq.stream.out}")
-    private val alertStream: String = ""
 
 
     @Value("\${rabbitmq.username}")
@@ -50,31 +50,19 @@ class RabbitConfig {
             .build()
 
 
-        env.streamCreator().stream(consumerStream).create()
-        env.streamCreator().stream(alertStream).create()
-
+        env.streamCreator().stream(sinkStream).create()
 
         return env
 
     }
 
     @Bean
-    fun consumer(environment: Environment, gemFireSaveConsumer: GemFireSaveConsumer) : Consumer {
-        return environment.consumerBuilder().stream(consumerStream)
+    fun consumer(environment: Environment, jdbcBatchExecutor: JdbcBatchExecutor) : Consumer {
+        return environment.consumerBuilder().stream(sinkStream)
+            .offset(OffsetSpecification.first())
             .messageHandler(MessageHandler{
-                    context, msg -> gemFireSaveConsumer.accept(msg.bodyAsBinary)}
+                    _, msg -> jdbcBatchExecutor.executeBatch(msg.bodyAsBinary)}
             ).build()
     }
 
-
-    @Bean
-    fun producer(environment : Environment) : Producer
-    {
-        return environment.producerBuilder().stream(alertStream)
-//            .routing(Function { msg: Message ->
-//                msg.properties.messageIdAsString
-//            })
-//            .producerBuilder()
-            .build()
-    }
 }

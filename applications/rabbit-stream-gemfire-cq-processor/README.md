@@ -88,7 +88,7 @@ https://rabbitmq.github.io/rabbitmq-stream-java-client/sac/htmlsingle/#for-singl
 
 ```json
 {
-  "id" : "001",
+  "id" : "1",
   "name" :  "WATER",
   "value" : 11
 }
