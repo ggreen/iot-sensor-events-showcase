@@ -46,7 +46,7 @@ class ConditionSummaryJdbcRepository(private val template: JdbcTemplate) : Condi
               totals_sensor_name.label label,
               (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and data#>>'{priority}' = '0') normal_count,
               (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and data#>>'{priority}' = '1') warning_count,
-              (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and cast(data#>>'{priority}' as int) > 2) severe_count
+              (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and cast(data#>>'{priority}' as int) > 1) severe_count
             from
                 (select count(*) total_count,data#>>'{sensor,name}' label   
                 from sensor_record  group by  data#>>'{sensor,name}') totals_sensor_name
