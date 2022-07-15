@@ -14,8 +14,8 @@ stream:
       UPDATE SET alert_cnt = (select alert_cnt+1 from sensor_alerts nested_sq where nested_sq.sensor_id = :id);
     - UPDATE sensor_record set data = jsonb_set(data,array['priority'],(SELECT CASE
       WHEN (select alert_cnt from sensor_alerts where sensor_id = :id)  < 10 THEN '0'
-      WHEN (select alert_cnt from sensor_alerts where sensor_id = :id)  < 200 THEN '1'
-      ELSE '0'
+      WHEN (select alert_cnt from sensor_alerts where sensor_id = :id)  < 20 THEN '1'
+      ELSE '2'
       END AS PRIORITY_ID)::jsonb) where id = :id;
 spring:
   datasource:
