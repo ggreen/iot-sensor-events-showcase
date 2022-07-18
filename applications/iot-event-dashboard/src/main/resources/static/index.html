@@ -258,16 +258,30 @@ div {
 
     function drawSummariesGroupBy(conditionOverview)
     {
+       var summaryForSensor = document.getElementById("summary-for-"+conditionOverview.label);
 
-       if(document.getElementById("summary-for-"+conditionOverview.label) != null)
-          return; //already exists
+      var labelNormalCount = conditionOverview.label+"-normalCount";
+      var labelWarningCount = conditionOverview.label+"-warningCount";
+      var labelSevereCount = conditionOverview.label+"-severeCount";
 
-      //Add ROW
-      //<tr><td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td></tr>
-      var row = "<tr id='summary-for-"+conditionOverview.label+"'><td>"+conditionOverview.label+"</td><td class='priority0'>"+conditionOverview.normalCount+"</td><td class='priority1'>"+conditionOverview.warningCount+"</td><td class='priority2'>"+conditionOverview.severeCount+"</td></tr>";
+       if(summaryForSensor != null)
+       {
+          document.getElementById(labelNormalCount).innerHTML = conditionOverview.normalCount;
+          document.getElementById(labelWarningCount).innerHTML = conditionOverview.warningCount;
+          document.getElementById(labelSevereCount).innerHTML = conditionOverview.severeCount;
+       }
+       else
+       {
+            //Add ROW
+            //<tr><td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td></tr>
+
+            var row = "<tr id='summary-for-"+conditionOverview.label+"'><td>"+conditionOverview.label+"</td><td class='priority0' id='"+labelNormalCount+"'>"+conditionOverview.normalCount+"</td><td class='priority1' id='"+labelWarningCount+"'>"+conditionOverview.warningCount+"</td><td class='priority2' id='"+labelSevereCount+"'>"+conditionOverview.severeCount+"</td></tr>";
+
+            $("#summariesGroupBySourceTableBody").append(row);
+       }
 
 
-       $("#summariesGroupBySourceTableBody").append(row);
+
     }
 </script>
 
