@@ -61,3 +61,25 @@ select (select count(id) from sensor_record) total_count,
 ```sqlite-sql
 select data#>'{sensor,sensorLocation,latitude}',  data#>'{sensor,sensorLocation,longitude}'  from sensor_record;
 ```
+
+UPDATE
+
+````sqlite-sql
+UPDATE sensor_record set data = jsonb_set(data,array['alarmCount'],to_jsonb((select (data->>'alarmCount')::int+1 from sensor_record nested_sq where nested_sq.id = '1'))) where id = '1';
+````
+
+
+Upsert
+
+
+```sqlite-sql
+-    INSERT INTO sensor_alerts (sensor_id, sensor_name,alert_cnt) VALUES(:id,:name,1)
+      ON CONFLICT ON CONSTRAINT sensor_alerts_pkey
+      DO
+      UPDATE SET alert_cnt = (select alert_cnt+1 from sensor_alerts nested_sq where nested_sq.sensor_id = :id);
+    - UPDATE sensor_record set data = jsonb_set(data,array['priority'],(SELECT CASE
+      WHEN (select alert_cnt from sensor_alerts where sensor_id = :id)  < 10 THEN '0'
+      WHEN (select alert_cnt from sensor_alerts where sensor_id = :id)  < 20 THEN '1'
+      ELSE '2'
+      END AS PRIORITY_ID)::jsonb) where id = :id;
+```

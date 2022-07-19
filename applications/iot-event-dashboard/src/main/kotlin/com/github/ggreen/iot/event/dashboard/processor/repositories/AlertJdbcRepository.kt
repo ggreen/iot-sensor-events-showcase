@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 class AlertJdbcRepository(private val template: JdbcTemplate) : AlertRepository {
-    private var sql = "select sum(alert_cnt) from sensor_alerts"
+    private var sql = "select sum((data->>'alarmCount')::int) from sensor_record"
 
     override fun count(): Long? {
         return template.queryForObject(sql, Long::class.java)

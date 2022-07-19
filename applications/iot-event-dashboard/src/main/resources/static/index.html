@@ -95,6 +95,27 @@ div {
     <hr/>
 
     <div id="mapid" style="width: 400px; height: 400px;"></div>
+
+    <!-- =================================== -->
+    <p>
+        <table class="dataTable">
+            <thead>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Alerts</th>
+            </thead>
+            <tbody id="drawSensorTableTableBody">
+            </tbody>
+        </table>
+
+    </p>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 </div>
 
 <script>
@@ -146,8 +167,37 @@ div {
       }
     };
 
+    function drawSensorTable(sensorOverview)
+    {
+        var rowid = "tableRow"+sensorOverview.id;
+
+        var sensorRow = document.getElementById(rowid);
+        if(sensorRow == null)
+        {
+
+           var sensorDataCells = "<td id='"+rowid+"-name"+"'>"+sensorOverview.sensor.name+"</td>";
+           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-locationName"+"'>"+sensorOverview.sensor.sensorLocation.locationName+"</td>";
+           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-alarmCount"+"'>"+sensorOverview.alarmCount+"</td>";
+
+           var rowHtml = "<tr id='"+rowid+"' class='priority"+sensorOverview.priority+"'>"+sensorDataCells+"</tr>";
+
+            $("#drawSensorTableTableBody").append(rowHtml);
+        }
+        else
+        {
+            //Update Sensor Row alarmCount
+            document.getElementById(rowid+"-alarmCount").innerHTML = sensorOverview.alarmCount;
+        }
+
+    }//---------------------------
+
     function drawSensorOverview(sensorOverview)
     {
+
+       //Build Table
+       drawSensorTable(sensorOverview);
+
+        //Update chart
 
         if(typeof window[sensorOverview.id] !== 'undefined')
         {

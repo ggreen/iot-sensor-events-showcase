@@ -6,6 +6,26 @@ hr{
     margin-left: 0;
 }
 
+.dataTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 450px;
+}
+
+.dataTable td, th {
+  padding: 8px;
+}
+
+.dataTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #C0C0C0;
+  color: white;
+}
+.dataTable tr:hover {background-color: #ddd;}
+
+
 #sensorStateCounts {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
