@@ -87,6 +87,12 @@ div {
     <!-- =================================== -->
     <hr/>
 
+    <h1>Alarms</h1>
+    <div>
+        <span  id="alertTotalCountNumber">0</span>
+    </div>
+    <!-- =================================== -->
+    <hr/>
 
     <div id="mapid" style="width: 400px; height: 400px;"></div>
 </div>
@@ -279,10 +285,61 @@ div {
 
             $("#summariesGroupBySourceTableBody").append(row);
        }
-
-
-
     }
+</script>
+
+<script>
+    // Alerts Charts
+    const alertChartData = {
+      labels: [ 'Air Quality',
+        'Temperature',
+        'Water Level'
+      ],
+      datasets: [{
+        label: 'Alerts',
+        data: [12,23,100],
+        backgroundColor: [
+        '#F0F8FF',
+          '#7FFFD4',
+          '#00FFFF'
+        ],
+        borderColor: [
+           '#F0F8FF',
+          '#7FFFD4',
+          '#00FFFF'
+        ],
+        borderWidth: 1
+      }]
+    };
+
+
+    const alertChartConfig = {
+  type: 'bar',
+  data: alertChartData,
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  },
+};
+
+  const alertChart = new Chart(
+    document.getElementById('alertChart'),
+    alertChartConfig
+  );
+
+   var alertCountEventsSource = new EventSource("/alertCountEvents-sse");
+
+   alertCountEventsSource.onmessage = function(event) {
+
+        var alertTotalCountNumber = event.data;
+
+       $("#alertTotalCountNumber").html(alertTotalCountNumber);
+
+   };
+
 </script>
 
 
