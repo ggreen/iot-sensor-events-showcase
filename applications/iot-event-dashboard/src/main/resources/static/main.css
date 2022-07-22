@@ -10,6 +10,7 @@ hr{
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 450px;
+    text-align: left;
 }
 
 .dataTable td, th {
@@ -19,7 +20,7 @@ hr{
 .dataTable th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: center;
+  text-align: left;
   background-color: #C0C0C0;
   color: white;
 }
@@ -89,6 +90,7 @@ hr{
 
   font: 10px Arial, sans-serif;
   text-align: center;
+  color: white;
   background: green
 }
 
@@ -100,6 +102,7 @@ hr{
 
   font: 10px Arial, sans-serif;
   text-align: center;
+  color: white;
   background: orange
 }
 
@@ -111,5 +114,6 @@ hr{
 
   font: 10px Arial, sans-serif;
   text-align: center;
+  color: white;
   background: red
 }

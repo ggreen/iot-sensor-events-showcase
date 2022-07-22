@@ -23,3 +23,15 @@ rabbit-gql --rabbitmq.stream.in=STREAM_TEMPERATURE --rabbitmq.stream.out=STREAM_
 "name" :  "TEMPERATURE",
 "value" : 111
 }
+
+
+```shell
+rabbit-gql --rabbitmq.stream.in=STREAM_AIR --rabbitmq.stream.out=STREAM_AIR_ALERT --gemfire.cq.oql="select * from /SensorMeasurement where name = 'AIR'  and value > 10" | jdbc-batch  --rabbitmq.stream.in=STREAM_AIR_ALERT
+```
+
+
+{
+"id" : "2",
+"name" :  "AIR",
+"value" : 11
+}

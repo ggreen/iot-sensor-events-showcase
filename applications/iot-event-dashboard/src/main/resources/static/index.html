@@ -177,7 +177,7 @@ div {
 
            var sensorDataCells = "<td id='"+rowid+"-name"+"'>"+sensorOverview.sensor.name+"</td>";
            sensorDataCells = sensorDataCells+"<td id='"+rowid+"-locationName"+"'>"+sensorOverview.sensor.sensorLocation.locationName+"</td>";
-           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-alarmCount"+"' class='alertCircle"+sensorOverview.priority+"'>"+sensorOverview.alarmCount+"</td>";
+           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-alarmCount"+"'><span class='alertCircle"+sensorOverview.priority+"'>"+sensorOverview.alarmCount+"</span></td>";
 
            var rowHtml = "<tr id='"+rowid+"'>"+sensorDataCells+"</tr>";
 
@@ -186,7 +186,7 @@ div {
         else
         {
             //Update Sensor Row alarmCount
-            document.getElementById(rowid+"-alarmCount").innerHTML = sensorOverview.alarmCount;
+            document.getElementById(rowid+"-alarmCount").innerHTML = "<span class='alertCircle"+sensorOverview.priority+"'>"+sensorOverview.alarmCount+"</span>";
         }
 
     }//---------------------------
