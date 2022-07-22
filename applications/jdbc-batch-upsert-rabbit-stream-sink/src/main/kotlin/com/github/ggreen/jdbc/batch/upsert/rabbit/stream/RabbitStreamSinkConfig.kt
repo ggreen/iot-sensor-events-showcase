@@ -2,6 +2,7 @@ package com.github.ggreen.jdbc.batch.upsert.rabbit.stream
 
 import com.github.ggreen.jdbc.batch.upsert.rabbit.stream.processor.JdbcBatchExecutor
 import com.rabbitmq.stream.*
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class RabbitStreamSinkConfig {
 
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Value("\${spring.application.name}")
     private val applicationName: String ="rabbit-stream-gemfire-cq-processor"
@@ -49,6 +51,8 @@ class RabbitStreamSinkConfig {
             .id(applicationName)
             .build()
 
+
+        log.info("Creating sinkStream: $sinkStream")
 
         env.streamCreator().stream(sinkStream).create()
 

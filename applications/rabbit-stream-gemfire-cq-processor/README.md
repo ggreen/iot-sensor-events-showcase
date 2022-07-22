@@ -17,6 +17,10 @@ start server --name=server
 create region --name=SensorMeasurement --type=PARTITION --eviction-action=local-destroy --eviction-max-memory=10000 --entry-time-to-live-expiration=60 --entry-time-to-live-expiration-action=DESTROY --enable-statistics=true 
 ```
 
+```shell
+create region --name=SensorMeasurement --type=PARTITION 
+```
+
 -------------
 Running RabbitMQ
 

@@ -177,9 +177,9 @@ div {
 
            var sensorDataCells = "<td id='"+rowid+"-name"+"'>"+sensorOverview.sensor.name+"</td>";
            sensorDataCells = sensorDataCells+"<td id='"+rowid+"-locationName"+"'>"+sensorOverview.sensor.sensorLocation.locationName+"</td>";
-           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-alarmCount"+"'>"+sensorOverview.alarmCount+"</td>";
+           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-alarmCount"+"' class='alertCircle"+sensorOverview.priority+"'>"+sensorOverview.alarmCount+"</td>";
 
-           var rowHtml = "<tr id='"+rowid+"' class='priority"+sensorOverview.priority+"'>"+sensorDataCells+"</tr>";
+           var rowHtml = "<tr id='"+rowid+"'>"+sensorDataCells+"</tr>";
 
             $("#drawSensorTableTableBody").append(rowHtml);
         }
@@ -329,8 +329,6 @@ div {
        else
        {
             //Add ROW
-            //<tr><td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td></tr>
-
             var row = "<tr id='summary-for-"+conditionOverview.label+"'><td>"+conditionOverview.label+"</td><td class='priority0' id='"+labelNormalCount+"'>"+conditionOverview.normalCount+"</td><td class='priority1' id='"+labelWarningCount+"'>"+conditionOverview.warningCount+"</td><td class='priority2' id='"+labelSevereCount+"'>"+conditionOverview.severeCount+"</td></tr>";
 
             $("#summariesGroupBySourceTableBody").append(row);

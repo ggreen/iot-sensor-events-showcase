@@ -7,6 +7,7 @@ import org.apache.geode.cache.query.CqAttributesFactory
 import org.apache.geode.cache.query.CqQuery
 import org.apache.geode.pdx.JSONFormatter
 import org.apache.geode.pdx.PdxInstance
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -51,6 +52,10 @@ class GemFireConfig {
 
         cqf.addCqListener(gemFireCqStreamPublisher)
         val cqa = cqf.create()
+
+        var log = LoggerFactory.getLogger(javaClass)
+        log.info("OQL: $oql")
+
         var cqQuery = queryService.newCq(cqName, oql, cqa);
         cqQuery.execute()
 

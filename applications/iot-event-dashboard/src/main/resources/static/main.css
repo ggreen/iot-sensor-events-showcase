@@ -19,7 +19,7 @@ hr{
 .dataTable th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
+  text-align: center;
   background-color: #C0C0C0;
   color: white;
 }
@@ -54,7 +54,7 @@ hr{
   line-height: 15px;
   border-radius: 50%;
   font-size: 10px;
-  color: black;
+  color: white;
   text-align: center;
   background: green
 }
@@ -77,6 +77,39 @@ hr{
   border-radius: 50%;
   font-size: 10px;
   color: black;
+  text-align: center;
+  background: red
+}
+
+.alertCircle0 {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+
+  font: 10px Arial, sans-serif;
+  text-align: center;
+  background: green
+}
+
+.alertCircle1 {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+
+  font: 10px Arial, sans-serif;
+  text-align: center;
+  background: orange
+}
+
+.alertCircle2 {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+
+  font: 10px Arial, sans-serif;
   text-align: center;
   background: red
 }

@@ -2,6 +2,7 @@ package com.github.ggreen.rabbit.gemfire.cq.processor
 
 import org.apache.geode.cache.Region
 import org.apache.geode.pdx.PdxInstance
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -21,10 +22,17 @@ class GemFireSaveConsumer(
     private val idFieldName: String
 ) : Consumer<ByteArray> {
 
+    private val log = LoggerFactory.getLogger(javaClass)
     override fun accept(payload: ByteArray) {
+
+        log.info(String(payload))
+
         var pdx = binaryToPdxConverter.apply(payload)
 
         var id = pdx.getField(idFieldName) as String?
+
+        log.info("id $id")
+
 
         region[id] = pdx
 
