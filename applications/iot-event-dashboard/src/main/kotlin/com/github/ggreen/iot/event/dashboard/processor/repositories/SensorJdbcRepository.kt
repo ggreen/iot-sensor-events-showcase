@@ -16,7 +16,7 @@ class SensorJdbcRepository(private val template: JdbcTemplate) : SensorRepositor
     override fun findSensorOverviews(): Iterable<SensorOverview> {
         val rowMapper : (ResultSet, Int) -> SensorOverview =
             {
-                    rs : ResultSet, id : Int ->  objectMapper.readValue(rs.getString("data"),SensorOverview::class.java)
+                    rs : ResultSet, _: Int ->  objectMapper.readValue(rs.getString("data"),SensorOverview::class.java)
             }
 
         return template.query("select * from sensor_record",rowMapper)

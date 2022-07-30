@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: iot-event-dashboard
+    run:  iot-event-dashboard
+  name:  iot-event-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name:  iot-event-dashboard
+  template:
+    metadata:
+      labels:
+        name:  iot-event-dashboard
+    spec:
+      containers:
+        - env:
+          - name: spring.datasource.url
+            value: jdbc:postgresql://postgres-postgresql/postgres
+          - name: spring.datasource.username
+            value: postgres
+          - name: spring.datasource.password
+            value: CHANGEME
+          - name: spring.flyway.url
+            value: jdbc:postgresql://postgres-postgresql/postgres
+          - name: spring.flyway.user
+            value: postgres
+          - name: spring.flyway.password
+            value: CHANGEME
+          - name: server.port
+            value: "8080"
+          image: cloudnativedata/iot-event-dashboard:0.0.1-SNAPSHOT
+          name: iot-event-dashboard
+#          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iot-event-dashboard
+spec:
+  selector:
+    name: iot-event-dashboard
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer

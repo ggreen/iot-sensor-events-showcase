@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run:  rabbit-stream-gemfire-cq-processor
+  name:  rabbit-stream-gemfire-cq-processor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name:  rabbit-stream-gemfire-cq-processor
+  template:
+    metadata:
+      labels:
+        name:  rabbit-stream-gemfire-cq-processor
+    spec:
+      containers:
+        - env:
+          - name: LOCATORS
+            valueFrom:
+              configMapKeyRef:
+                name: gemfire1-config
+                key: locators
+          image: cloudnativedata/rabbit-stream-gemfire-cq-processor:0.0.2-SNAPSHOT
+          name: account-rest-service
+#          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always

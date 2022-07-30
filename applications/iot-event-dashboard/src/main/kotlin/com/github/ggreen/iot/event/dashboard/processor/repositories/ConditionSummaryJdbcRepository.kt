@@ -2,7 +2,6 @@ package com.github.ggreen.iot.event.dashboard.repositories
 
 import com.github.ggreen.iot.event.dashboard.domains.analytics.ConditionSummaries
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
 
@@ -23,7 +22,7 @@ class ConditionSummaryJdbcRepository(private val template: JdbcTemplate) : Condi
             {  rs : ResultSet ->
 
                 if(!rs.next())
-                    null;
+                    null
                 else
                 {
                     ConditionSummaries(totalCount = rs.getInt(1),
@@ -41,7 +40,7 @@ class ConditionSummaryJdbcRepository(private val template: JdbcTemplate) : Condi
      */
     override fun findConditionSummariesGroupNyName(): Iterable<ConditionSummaries>? {
 
-        var sql = """
+        val sql = """
             select
               totals_sensor_name.label label,
               (select count(*) from sensor_record where  data#>>'{sensor,name}' = totals_sensor_name.label and data#>>'{priority}' = '0') normal_count,
@@ -53,7 +52,7 @@ class ConditionSummaryJdbcRepository(private val template: JdbcTemplate) : Condi
             order by label;
         """.trimIndent()
 
-        val rowMapper = { rs:ResultSet, rowNum:Int ->
+        val rowMapper = { rs:ResultSet, _:Int ->
             ConditionSummaries( label = rs.getString("label"),
                                 normalCount =  rs.getInt("normal_count"),
                                 warningCount = rs.getInt("warning_count"),

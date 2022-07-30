@@ -1,11 +1,11 @@
 package com.github.ggreen.rabbit.gemfire.cq
 
 import com.github.ggreen.rabbit.gemfire.cq.listener.GemFireCqStreamPublisher
-import io.pivotal.services.dataTx.geode.client.GeodeClient
+import com.vmware.data.services.apache.geode.client.GeodeClient
+import org.apache.geode.pdx.JSONFormatter
 import org.apache.geode.cache.Region
 import org.apache.geode.cache.query.CqAttributesFactory
 import org.apache.geode.cache.query.CqQuery
-import org.apache.geode.pdx.JSONFormatter
 import org.apache.geode.pdx.PdxInstance
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

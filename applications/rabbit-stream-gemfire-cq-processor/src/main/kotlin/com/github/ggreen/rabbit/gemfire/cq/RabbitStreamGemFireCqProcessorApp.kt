@@ -1,5 +1,6 @@
 package com.github.ggreen.rabbit.gemfire.cq
 
+import nyla.solutions.core.util.Config
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -10,5 +11,8 @@ import org.springframework.boot.runApplication
 class RabbitStreamGemFireCqProcessor
 
 fun main(args: Array<String>) {
+
+        Config.loadArgs(args)
+
         runApplication<RabbitStreamGemFireCqProcessor>(*args)
 }

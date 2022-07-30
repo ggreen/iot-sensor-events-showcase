@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.github.ggreen"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -21,6 +21,7 @@ extra["springCloudVersion"] = "2021.0.3"
 
 dependencies {
 
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
@@ -30,7 +31,16 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("io.pivotal.services.dataTx:dataTx-geode-extensions-core:2.5.0")
+	implementation("io.pivotal.services.dataTx:apache-geode-extensions-core:3.0.0-SNAPSHOT")
+	implementation("org.apache.geode:geode-core:1.15.0")
+	implementation("org.apache.geode:geode-logging:1.15.0")
+	implementation("org.apache.geode:geode-lucene:1.15.0")
+	implementation("org.apache.geode:geode-wan:1.15.0")
+	implementation("org.apache.geode:geode-cq:1.15.0")
+	implementation("org.apache.geode:geode-common:1.15.0")
+	implementation("org.apache.geode:geode-lucene:1.15.0")
+
+
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
@@ -55,5 +65,6 @@ tasks.withType<Test> {
 
 repositories {
 //	maven { url "https://packagecloud.io/rabbitmq/maven-milestones/maven2" }
+	mavenLocal()
 	mavenCentral()
 }

@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run:  apache-geode-config-server
+  name:  apache-geode-config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name:  apache-geode-config-server
+  template:
+    metadata:
+      labels:
+        name:  apache-geode-config-server
+    spec:
+      containers:
+        - env:
+          - name: environment.json.array
+            value: |
+              [
+                  {
+                    "name": "iot-event-dashboard",
+                    "propertySources": [
+                      {"name" :  "application.properties",
+                        "source" : {
+                          "server.port" : 8080,
+                          "spring.datasource.url" : "jdbc:postgresql://postgres-postgresql/postgres",
+                          "spring.config.import" : "configserver:http://apache-geode-config-server-service:8888",
+                          "spring.datasource.username" : "postgres",
+                          "spring.datasource.password" : "CHANGEME"
+                        }
+                      }
+                    ],
+                    "profiles": ["default"]
+                  },
+                  {
+                    "name": "jdbc-batch-upsert-rabbit-stream-sink",
+                    "propertySources": [
+                      {"name" :  "application.properties",
+                        "source" : {
+                          "management.endpoints.web.exposure.include":  "info, health",
+                          "spring.data.gemfire.pool.locators" : "gemfire1-locator-0.gemfire1-locator.default.svc.cluster.local[10334]",
+                          "spring.flyway.url": "jdbc:postgresql://postgres-postgresql/postgres",
+                          "spring.flyway.user": "postgres",
+                          "spring.flyway.password": "CHANGEME",
+                          "spring.datasource.url" : "jdbc:postgresql://postgres-postgresql/postgres",
+                          "spring.datasource.username" : "postgres",
+                          "spring.datasource.password" : "CHANGEME",
+                          "server.port": "8080",
+                          "spring.config.import" : "configserver:http://apache-geode-config-server-service:8888",
+                          "rabbitmq.username" : "changeme",
+                          "rabbitmq.password" : "changeme",
+                          "rabbitmq.host" : "rabbit",
+                          "rabbitmq.port" : "5552"
+                        }
+                      }
+                    ],
+                    "profiles": ["default"]
+                  },
+                  {
+                    "name": "rabbit-stream-gemfire-cq-processor",
+                    "propertySources": [
+                      {"name" :  "application.properties",
+                        "source" : {
+                          "server.port" : 8080,
+                          "management.endpoints.web.exposure.include":  "info, health",
+                          "spring.data.gemfire.pool.locators" : "gemfire1-locator-0.gemfire1-locator.default.svc.cluster.local[10334]",
+                          "LOCATORS" : "gemfire1-locator-0.gemfire1-locator.default.svc.cluster.local[10334]",
+                          "rabbitmq.stream.host" : "rabbit",
+                          "rabbitmq.host" : "rabbit",
+                          "rabbitmq.port" : "5552",
+                          "rabbitmq.username" : "changeme",
+                          "rabbitmq.password" : "changeme",
+                          "spring.config.import" : "configserver:http://apache-geode-config-server-service:8888",
+                          "spring.cloud.stream.bindings.atmConsumer-in-0.consumer.declareExchange" : "false"
+                        }
+                      }
+                    ],
+                    "profiles": ["default"]
+                  }
+                  ]
+          - name: spring.data.gemfire.pool.locators
+            valueFrom:
+              configMapKeyRef:
+                name: gemfire1-config
+                key: locators
+          image: cloudnativedata/apache-geode-config-server:0.0.1-SNAPSHOT
+          name: apache-geode-config-server
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-geode-config-server-service
+spec:
+  selector:
+    name: apache-geode-config-server
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888

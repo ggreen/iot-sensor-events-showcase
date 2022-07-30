@@ -21,6 +21,7 @@ extra["springCloudVersion"] = "2021.0.3"
 
 dependencies {
 
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
 	implementation("com.github.nyla-solutions:nyla.solutions.core:1.5.1-SNAPSHOT")
 
 	implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
