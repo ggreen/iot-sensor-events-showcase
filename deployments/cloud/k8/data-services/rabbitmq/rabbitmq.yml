@@ -4,6 +4,8 @@ metadata:
   name: rabbit
   namespace: default
 spec:
+  service:
+    type: LoadBalancer
   replicas: 1
 #  service:
 #    type: LoadBalancer

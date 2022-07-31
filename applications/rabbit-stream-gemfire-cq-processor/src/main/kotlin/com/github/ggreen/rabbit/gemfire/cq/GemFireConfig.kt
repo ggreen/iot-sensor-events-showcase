@@ -26,8 +26,11 @@ class GemFireConfig {
     @Value("\${gemfire.cq.oql}")
     private lateinit var oql: String
 
-    @Value("\${spring.application.name}")
+    @Value("\${gemfire.cq.cqName:rabbit-stream-gemfire-cq-processor}")
     private lateinit var cqName: String
+
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
     fun bytesToPdxConverter(geodeClient: GeodeClient)  : Function<ByteArray, PdxInstance>
@@ -53,8 +56,7 @@ class GemFireConfig {
         cqf.addCqListener(gemFireCqStreamPublisher)
         val cqa = cqf.create()
 
-        var log = LoggerFactory.getLogger(javaClass)
-        log.info("OQL: $oql")
+        log.info("cqName: $cqName OQL: $oql")
 
         var cqQuery = queryService.newCq(cqName, oql, cqa);
         cqQuery.execute()

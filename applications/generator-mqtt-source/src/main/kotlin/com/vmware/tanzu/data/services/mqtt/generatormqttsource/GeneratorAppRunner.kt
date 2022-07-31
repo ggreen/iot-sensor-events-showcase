@@ -28,7 +28,7 @@ class GeneratorAppRunner(
     private val logger: Logger = LoggerFactory.getLogger(GeneratorAppRunner::class.java)
     private val generator : GenerateTextWithPropertiesCreator = GenerateTextWithPropertiesCreator(template)
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedDelayString = "\${generator.schedule.rate.ms:5000}")
     fun generateMessage() {
 
         val output = generator.create();
