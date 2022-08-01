@@ -1,0 +1,10 @@
+#spring.config.import: "configserver:"
+generator.mqtt.topic: SensorMeasurement
+mqtt:
+  userName: guest
+  userPassword: guest
+spring:
+  application:
+    name: generator-mqtt-source
+  config:
+    import: "optional:configserver:"
