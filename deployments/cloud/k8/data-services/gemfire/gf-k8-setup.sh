@@ -32,6 +32,7 @@ kubectl wait pod -l=app.kubernetes.io/component=gemfire-controller-manager --for
 
  k get pods --namespace gemfire-system
 
-kubectl apply -f cloud/k8/data-services/geode/gemfire.yml
+kubectl apply -f deployments/cloud/k8/data-services/gemfire/gemfire.yml
 
+sleep 10s
 kubectl wait pod -l=app=gemfire1-server --for=condition=Ready --timeout=160s
