@@ -13,10 +13,10 @@ The following are the applications
 
 Appplication                        |   Notes
 -----------------------             |   -----------------------------
-generator-mqtt-source               | Generate Edge Iot sensor dat
-iot-event-dashboard                 | Spring Reactive web application to visualize device information
-jdbc-batch-upsert-rabbit-stream-sink | Data pipeline application to insert sensor data into an JDBC compatiable database
-rabbit-stream-gemfire-cq-processor   | Data pipeline application to filter JSON data based on a matching GemFire [OQL](https://gemfire.docs.pivotal.io/98/geode/developing/querying_basics/query_basics.html) [continuous queries](https://gemfire.docs.pivotal.io/95/geode/developing/continuous_querying/how_continuous_querying_works.html)
+[generator-mqtt-source](https://github.com/ggreen/iot-sensor-events-showcase/tree/main/applications/generator-mqtt-source)               | Generate Edge Iot sensor dat
+[iot-event-dashboard](https://github.com/ggreen/iot-sensor-events-showcase/tree/main/applications/iot-event-dashboard)                 | Spring Reactive web application to visualize device information
+[jdbc-batch-upsert-rabbit-stream-sink](https://github.com/ggreen/iot-sensor-events-showcase/tree/main/applications/jdbc-batch-upsert-rabbit-stream-sink) | Data pipeline application to insert sensor data into an JDBC compatiable database
+[rabbit-stream-gemfire-cq-processor](https://github.com/ggreen/iot-sensor-events-showcase/tree/main/applications/rabbit-stream-gemfire-cq-processor)   | Data pipeline application to filter JSON data based on a matching GemFire [OQL](https://gemfire.docs.pivotal.io/98/geode/developing/querying_basics/query_basics.html) [continuous queries](https://gemfire.docs.pivotal.io/95/geode/developing/continuous_querying/how_continuous_querying_works.html)
 
 
 ## Start Postgres
