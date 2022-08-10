@@ -31,7 +31,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("io.pivotal.services.dataTx:apache-geode-extensions-core:3.0.0-SNAPSHOT")
+	implementation("io.pivotal.services.dataTx:gemfire-extensions-core:1.1.0")
 	implementation("org.apache.geode:geode-core:1.15.0")
 	implementation("org.apache.geode:geode-logging:1.15.0")
 	implementation("org.apache.geode:geode-lucene:1.15.0")

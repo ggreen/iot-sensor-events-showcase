@@ -1,7 +1,7 @@
 package com.github.ggreen.rabbit.gemfire.cq
 
 import com.github.ggreen.rabbit.gemfire.cq.listener.GemFireCqStreamPublisher
-import com.vmware.data.services.apache.geode.client.GeodeClient
+import com.vmware.data.services.gemfire.client.GemFireClient
 import org.apache.geode.pdx.JSONFormatter
 import org.apache.geode.cache.Region
 import org.apache.geode.cache.query.CqAttributesFactory
@@ -33,7 +33,7 @@ class GemFireConfig {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
-    fun bytesToPdxConverter(geodeClient: GeodeClient)  : Function<ByteArray, PdxInstance>
+    fun bytesToPdxConverter(gemFireClient: GemFireClient)  : Function<ByteArray, PdxInstance>
     {
         return  Function<ByteArray, PdxInstance>
         { payload : ByteArray ->  JSONFormatter.fromJSON(payload)
@@ -41,13 +41,13 @@ class GemFireConfig {
     }
 
     @Bean
-    fun geodeClient() : GeodeClient
+    fun geodeClient() : GemFireClient
     {
-        return GeodeClient.connect()
+        return GemFireClient.connect()
     }
 
     @Bean
-    fun cqQuery(geodeClient: GeodeClient,gemFireCqStreamPublisher : GemFireCqStreamPublisher): CqQuery? {
+    fun cqQuery(geodeClient: GemFireClient,gemFireCqStreamPublisher : GemFireCqStreamPublisher): CqQuery? {
 
         var clientCache = geodeClient.clientCache
         var queryService = clientCache.queryService;
@@ -65,7 +65,7 @@ class GemFireConfig {
     }
 
     @Bean("jsonBytesToPdxConverter")
-    fun binaryToPdxConverter(geodeClient: GeodeClient): Function<ByteArray, PdxInstance>{
+    fun binaryToPdxConverter(geodeClient: GemFireClient): Function<ByteArray, PdxInstance>{
         return Function<ByteArray, PdxInstance>{ jsonBytes ->
             JSONFormatter.fromJSON(jsonBytes)
         }
@@ -77,7 +77,7 @@ class GemFireConfig {
     }
 
     @Bean
-    fun region(geodeClient: GeodeClient) : Region<String, PdxInstance>
+    fun region(geodeClient: GemFireClient) : Region<String, PdxInstance>
     {
         return geodeClient.getRegion<String,PdxInstance>(regionName)
     }
