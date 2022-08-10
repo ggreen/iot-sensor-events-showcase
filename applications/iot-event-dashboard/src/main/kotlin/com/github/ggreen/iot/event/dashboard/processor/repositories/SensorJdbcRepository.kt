@@ -21,4 +21,11 @@ class SensorJdbcRepository(private val template: JdbcTemplate) : SensorRepositor
 
         return template.query("select * from sensor_record",rowMapper)
     }
+
+    /**
+     * @return the number of records updates
+     */
+    override fun updateAllSensorOverviewAlarmCounts(alarmCount: Int,priority: Short): Int {
+        return template.update("UPDATE sensor_record set data = (jsonb_set(data,array['alarmCount'],to_jsonb(?)) || '{\"priority\": $priority}');",alarmCount)
+    }
 }

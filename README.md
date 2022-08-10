@@ -29,6 +29,7 @@ brew services start postgresql&
 psql -d postgres -U postgres
 ```
 
+## Postgres JSONB SQL Examples 
 
 ```sqlite-sql
 
@@ -80,12 +81,26 @@ select (select count(id) from sensor_record) total_count,
 select data#>'{sensor,sensorLocation,latitude}',  data#>'{sensor,sensorLocation,longitude}'  from sensor_record;
 ```
 
-UPDATE
+Increment Alarms UPDATE
 
 ````sqlite-sql
 UPDATE sensor_record set data = jsonb_set(data,array['alarmCount'],to_jsonb((select (data->>'alarmCount')::int+1 from sensor_record nested_sq where nested_sq.id = '1'))) where id = '1';
 ````
 
+
+Updata Alarm Count to 0
+
+```sqlite-sql
+UPDATE sensor_record set data = jsonb_set(data,array['alarmCount'],to_jsonb(0));
+```
+
+
+Update alarm count and priority
+
+```sqlite-sql
+UPDATE sensor_record set data = (jsonb_set(data,array['alarmCount'],to_jsonb(3)) || '{"priority": 0}');
+
+```
 
 Upsert
 

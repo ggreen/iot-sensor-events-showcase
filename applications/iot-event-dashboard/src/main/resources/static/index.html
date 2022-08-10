@@ -22,6 +22,14 @@
       });
     });
     </script>
+    <script language="JavaScript">
+        function cleanAlerts()
+        {
+            $.post("clearAlerts",null, function(data, status){
+                location.reload();
+              });
+        }
+    </script>
 </head>
 <style>
 input[type=text], select {
@@ -54,12 +62,35 @@ div {
   background-color: #f2f2f2;s
   padding: 20px;
 }
+
+.button {
+  background-color: green; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+.button1 {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
 </style>
 <body>
 <div class="w3-main">
     <!--<h1>IOT Data Services Showcase</h1>-->
     <h5 class="fa fa-dashboard">IoT Dashboard</h5>
     <hr/>
+    <p>
+        <button class="button button1" onclick="cleanAlerts(); return false;">Clear Alerts</button>
+    </p>
     <table>
         <tr>
             <td>
