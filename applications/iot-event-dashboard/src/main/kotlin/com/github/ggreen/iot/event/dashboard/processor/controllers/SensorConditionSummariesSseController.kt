@@ -28,7 +28,7 @@ class SensorConditionSummariesSseController(private val repository: ConditionSum
 
     @GetMapping("/summariesGroupBy-sse")
     fun summariesGroupBy(): Flux<ServerSentEvent<Iterable<ConditionSummaries>>>? {
-        return Flux.interval(Duration.ofSeconds(1))
+        return Flux.interval(Duration.ofSeconds(2))
             .map<ServerSentEvent<Iterable<ConditionSummaries>>> { sequence: Long ->
 
                 val builder = ServerSentEvent.builder<Iterable<ConditionSummaries>>()

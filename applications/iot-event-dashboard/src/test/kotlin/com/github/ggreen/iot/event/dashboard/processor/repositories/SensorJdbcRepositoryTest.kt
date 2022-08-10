@@ -52,7 +52,7 @@ internal class SensorJdbcRepositoryTest{
         val expectedAlarmCount :Int = 3
         val expectedPriority : Short = 1
 
-        whenever(template.update(anyString(), any<Int>(),any<Short>())).thenReturn(expectedAlarmCount)
+        whenever(template.update(anyString(), any<Int>())).thenReturn(expectedAlarmCount)
         var actual = subject.updateAllSensorOverviewAlarmCounts(expectedAlarmCount,expectedPriority)
 
         assertEquals(expectedAlarmCount,actual);

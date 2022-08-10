@@ -16,7 +16,7 @@ class SensorOverviewSseController(private val sensorDataService: SensorRepositor
 
     @GetMapping("/streamOverviewEvents-sse")
     fun streamOverviewEvents(): Flux<ServerSentEvent<Iterable<SensorOverview>>>? {
-        return Flux.interval(Duration.ofSeconds(1))
+        return Flux.interval(Duration.ofSeconds(3))
             .map<ServerSentEvent<Iterable<SensorOverview>>> { sequence: Long ->
 
                 var builder = ServerSentEvent.builder<Iterable<SensorOverview>>()

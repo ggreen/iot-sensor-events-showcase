@@ -15,7 +15,7 @@ class AlertSseController(private val alertRepository: AlertRepository) {
 
     @GetMapping("/alertCountEvents-sse")
     fun alertCount(): Flux<ServerSentEvent<Long>>? {
-        return Flux.interval(Duration.ofSeconds(1))
+        return Flux.interval(Duration.ofSeconds(2))
             .map<ServerSentEvent<Long>> { sequence: Long ->
 
                 var builder = ServerSentEvent.builder<Long>()
