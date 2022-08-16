@@ -1,4 +1,4 @@
-package com.github.ggreen.rabbit.gemfire.cq.publisher
+package com.github.ggreen.rabbit.gemfire.filter.oql.publisher
 
 import com.rabbitmq.stream.ConfirmationStatus
 import com.rabbitmq.stream.Producer
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component
  */
 @Component
 class RabbitMQStreamPublisher(private val producer: Producer) : StreamPublisher {
-    override fun send(json: String) {
+    override fun send(json: ByteArray) {
         producer.send(
-            producer.messageBuilder().addData(json.toByteArray(Charsets.UTF_8)).build()
-        ) { _: ConfirmationStatus? -> }
+            producer.messageBuilder().addData(json).build()
+        ) { confirmationStatus: ConfirmationStatus? -> }
 
     }
 }
