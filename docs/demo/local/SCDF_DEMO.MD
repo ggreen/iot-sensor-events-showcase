@@ -1,3 +1,13 @@
+Gemfire
+
+```shell
+start locator --name=locator  
+configure pdx --read-serialized=true --disk-store
+start server --name=server1 
+create region --name=Properties --type=PARTITION_PERSISTENT
+create region --name=SensorMeasurement --type=PARTITION
+```
+
 Start SCDF
 ```shell
 cd /Users/devtools/integration/scdf
@@ -13,7 +23,11 @@ cd /Users/devtools/integration/scdf
 ```
 
 ```shell
-app register --name rstream-query-filter --type processor --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/gemfire-oql-filter-rabbit-stream-processor/build/libs/gemfire-oql-filter-rabbit-stream-processor-0.0.2-SNAPSHOT.jar
+app register --name rstream-filter --type processor --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/gemfire-oql-filter-rabbit-stream-processor/build/libs/gemfire-oql-filter-rabbit-stream-processor-0.0.2-SNAPSHOT.jar
+```
+
+```shell
+app register --name rstream-filter --type sink --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/gemfire-oql-filter-rabbit-stream-processor/build/libs/gemfire-oql-filter-rabbit-stream-processor-0.0.2-SNAPSHOT.jar
 ```
 
 ```shell
@@ -28,6 +42,7 @@ app register --name rstream-query --type source --uri file:///Users/Projects/VMw
 app register --name rstream-query --type processor --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/rabbit-stream-gemfire-cq-processor/build/libs/rabbit-stream-gemfire-cq-processor-0.0.2-SNAPSHOT.jar
 ```
 
+rstream-filter
 
 
 ## Federal
@@ -64,12 +79,43 @@ java -jar -DINT_RANGE_TEXT_CREATOR_MIN=1 -DINT_RANGE_TEXT_CREATOR_MAX=11 applica
 -------------
 ## Retail
 
-FROZEN_FOOD_STREAM=rstream-query --gemfire.cq.oql="select * from /SensorMeasurement where name = 'FROZEN_FOOD' and temperature > 35" --rabbitmq.stream.out="FLOOR_ASSOCIATE_ALERT" | rstream-query-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and state = 'OPEN'" --rabbitmq.stream.in="FLOOR_ASSOCIATE_ALERT" --rabbit.stream.out="COOLER_MGMT_ALERT"  | rstream-jdbc --rabbit.stream.int="COOLER_MGMT_ALERT"
-:FROZEN_FOOD_STREAM.rstream-query > rstream-jdbc  --rabbitmq.stream.in="FLOOR_ASSOCIATE_ALERT"
+| rstream-jdbc --rabbitmq.stream.in="COOLER_MGMT_ALERT"
 
+FROZEN_FOOD_STREAM=rstream-query --gemfire.cq.oql="select * from /SensorMeasurement where name = 'FROZEN_FOOD_TEMPERATURE' and value > 35" --rabbitmq.stream.out="SensorMeasurementAlert" | rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 1" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="FLOOR_ASSOCIATE_ALERT"  
+:FROZEN_FOOD_STREAM.rstream-query > rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 0" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="COOLER_MGMT_ALERT" 
+
+
+Good
 
 {
 "id" : "2|REFRIG",
-"name" :  "FROZEN_FOOD",
-"temperature" : 11
+"name" :  "FROZEN_FOOD_TEMPERATURE",
+"value" : 11
+}
+
+
+Bad Floor Associate
+
+{
+"id" : "2",
+"name" :  "FROZEN_FOOD_TEMPERATURE",
+"value" : 36
+}
+
+Door closed
+
+{
+"id" : "2|DOOR",
+"name" :  "FROZEN_FOOD_DOOR",
+"value" : 0
+}
+
+
+
+Door open
+
+{
+"id" : "2|DOOR",
+"name" :  "FROZEN_FOOD_DOOR",
+"value" : 1
 }

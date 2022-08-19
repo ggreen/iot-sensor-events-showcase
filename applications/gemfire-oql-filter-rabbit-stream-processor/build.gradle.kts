@@ -26,7 +26,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
 	implementation("com.rabbitmq:stream-client-sac:0.6.0-SNAPSHOT")
-	implementation("com.github.nyla-solutions:nyla.solutions.core:1.5.0")
+	implementation("com.github.nyla-solutions:nyla.solutions.core:1.5.1-SNAPSHOT")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

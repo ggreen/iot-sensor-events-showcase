@@ -2,6 +2,8 @@ package com.github.ggreen.rabbit.gemfire.filter.oql
 
 import com.github.ggreen.rabbit.gemfire.filter.oql.service.OqlFilter
 import com.rabbitmq.stream.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,6 +13,9 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 class RabbitConfig {
+
+    private val logger: Logger = LoggerFactory.getLogger(RabbitConfig::class.java)
+
     @Value("\${spring.application.name}")
     private val applicationName: String ="gemfire-oql-filter-rabbit-stream-processor"
 
@@ -46,6 +51,8 @@ class RabbitConfig {
 
         env.streamCreator().stream(consumerStream).create()
         env.streamCreator().stream(publisherStream).create()
+
+        logger.info("RabbitMQ streams created consumerStream: $consumerStream publisherStream:$publisherStream")
 
         return env
     }

@@ -17,13 +17,20 @@ import java.util.function.Function
 @Component
 class OqlFilter(private val queryService: QuerierService,
                 @Value("\${filter.query}")
-                private val oql: String,
+                private var oql: String,
                 private val publisher: StreamPublisher,
                 private val textStylist : TextStylist
 ) : Function<ByteArray,ByteArray?> {
-
     private val logger: Logger = LoggerFactory.getLogger(OqlFilter::class.java)
     private val objectMapper = ObjectMapper()
+
+
+    init {
+        logger.info("Configured OQL:$oql")
+        oql = Text.trim(oql,'\'')
+        logger.info("Cleaned OQL:$oql")
+    }
+
 
     /**
      * Applies this function to the given argument.
@@ -33,6 +40,7 @@ class OqlFilter(private val queryService: QuerierService,
      */
     override fun apply(payload: ByteArray): ByteArray? {
         val jsonMap = objectMapper.readValue(payload,Map::class.java)
+        logger.info("OQL: $oql \nMAP: $jsonMap")
 
         val formattedOql = textStylist.format(oql,jsonMap)
         logger.info(formattedOql)

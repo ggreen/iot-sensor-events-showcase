@@ -2,6 +2,8 @@ package com.github.ggreen.rabbit.gemfire.cq
 
 import com.github.ggreen.rabbit.gemfire.cq.processor.GemFireSaveConsumer
 import com.rabbitmq.stream.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 class RabbitConfig {
+    private val logger: Logger = LoggerFactory.getLogger(RabbitConfig::class.java)
+
     @Value("\${spring.application.name}")
     private val applicationName: String ="rabbit-stream-gemfire-cq-processor"
 
@@ -50,9 +54,11 @@ class RabbitConfig {
             .build()
 
 
+
         env.streamCreator().stream(consumerStream).create()
         env.streamCreator().stream(alertStream).create()
 
+        logger.info("RabbitMQ streams created consumerStream: $consumerStream alertStream:$alertStream")
 
         return env
 
