@@ -1,15 +1,4 @@
-VMware Explore
 
-- https://event.vmware.com/flow/vmware/explore2022us/content/page/catalog?tab.contentcatalogtabs=1627421929827001vRXW&search=2799
-
-Deck?
-
-Time for demo? 10 minutes
-
-Flow
-
-- RabbitMQ and GemFire and Realtime Analytics Applications on Edge
-- Configured alerts Beef Re
 
 
 
