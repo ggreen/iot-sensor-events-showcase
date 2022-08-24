@@ -57,7 +57,7 @@ Good
 ```
 
 
-Bad Floor Associate
+Generate Cooler Management Alert - with door closed
 ```json
 {
 "id" : "2",
@@ -65,6 +65,8 @@ Bad Floor Associate
 "value" : 36
 }
 ```
+
+
 
 
 
