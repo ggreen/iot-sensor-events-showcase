@@ -32,13 +32,6 @@ class GemFireConfig {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    @Bean
-    fun bytesToPdxConverter(gemFireClient: GemFireClient)  : Function<ByteArray, PdxInstance>
-    {
-        return  Function<ByteArray, PdxInstance>
-        { payload : ByteArray ->  JSONFormatter.fromJSON(payload)
-        }
-    }
 
     @Bean
     fun geodeClient() : GemFireClient
@@ -62,6 +55,14 @@ class GemFireConfig {
         cqQuery.execute()
 
         return cqQuery
+    }
+
+    @Bean
+    fun bytesToPdxConverter(gemFireClient: GemFireClient)  : Function<ByteArray, PdxInstance>
+    {
+        return  Function<ByteArray, PdxInstance>
+        { payload : ByteArray ->  JSONFormatter.fromJSON(payload)
+        }
     }
 
     @Bean("jsonBytesToPdxConverter")

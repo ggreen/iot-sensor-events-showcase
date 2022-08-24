@@ -6,6 +6,7 @@ configure pdx --read-serialized=true --disk-store
 start server --name=server1 
 create region --name=Properties --type=PARTITION_PERSISTENT
 create region --name=SensorMeasurement --type=PARTITION
+create region --name=FloorAssociateAlert --type=PARTITION
 ```
 
 Start SCDF
@@ -42,7 +43,9 @@ app register --name rstream-query --type source --uri file:///Users/Projects/VMw
 app register --name rstream-query --type processor --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/rabbit-stream-gemfire-cq-processor/build/libs/rabbit-stream-gemfire-cq-processor-0.0.2-SNAPSHOT.jar
 ```
 
-rstream-filter
+```shell
+app register --name gemfire --type sink --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/gemfire-stream-sink/build/libs/gemfire-stream-sink-0.0.2-SNAPSHOT.jar
+```
 
 
 ## Federal
@@ -81,7 +84,8 @@ java -jar -DINT_RANGE_TEXT_CREATOR_MIN=1 -DINT_RANGE_TEXT_CREATOR_MAX=11 applica
 
 | rstream-jdbc --rabbitmq.stream.in="COOLER_MGMT_ALERT"
 
-FROZEN_FOOD_STREAM=rstream-query --gemfire.cq.oql="select * from /SensorMeasurement where name = 'FROZEN_FOOD_TEMPERATURE' and value > 35" --rabbitmq.stream.out="SensorMeasurementAlert" | rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 1" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="FLOOR_ASSOCIATE_ALERT"  
+FROZEN_FOOD_STREAM=rstream-query --gemfire.cq.oql="select * from /SensorMeasurement where name = 'FROZEN_FOOD_TEMPERATURE' and value > 35" --rabbitmq.stream.out="SensorMeasurementAlert" | rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 1" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="FLOOR_ASSOCIATE_ALERT" | gemfire --rabbitmq.stream.in="FLOOR_ASSOCIATE_ALERT" --gemfire.locators="localhost[10334]" --gemfire.region.name=FloorAssociateAlert
+  
 :FROZEN_FOOD_STREAM.rstream-query > rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 0" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="COOLER_MGMT_ALERT" 
 
 

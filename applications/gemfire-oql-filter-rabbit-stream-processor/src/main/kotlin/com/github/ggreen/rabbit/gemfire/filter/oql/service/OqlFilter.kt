@@ -48,6 +48,9 @@ class OqlFilter(private val queryService: QuerierService,
         val result = queryService.query<Any?>(formattedOql)
 
         if(result != null && !result.isEmpty()) {
+
+            logger.info("Sending payload")
+
             publisher.send(payload)
             return payload
         }

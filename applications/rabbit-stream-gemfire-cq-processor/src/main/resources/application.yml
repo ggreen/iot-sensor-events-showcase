@@ -1,0 +1,52 @@
+server.port: 8882
+rabbitmq:
+  username: guest
+  password: guest
+  host: localhost
+  port: 5552
+  stream:
+    in: SensorMeasurement
+    out: SensorMeasurementAlert
+gemfire:
+  region:
+    name: SensorMeasurement
+    idFieldName: id
+  cq:
+    oql: |+
+      select * from /SensorMeasurement
+      where name = 'WATER'  and value > 10
+#The Following end points used a k8 Readiness probbe
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+spring:
+  config:
+    import: optional:configserver:http://localhost:8888
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: security
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    baselineOnMigrate: true
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: postgres
+    password: security
+  r2dbc:
+    url:
+    username: postgres
+    password: security
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+  application:
+    name: rabbit-stream-gemfire-cq-processo
+postgres:
+  host: localhost
+  database: postgres
+  username: postgres
+  password: security
