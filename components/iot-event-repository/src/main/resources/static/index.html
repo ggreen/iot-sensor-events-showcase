@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+
+    <title>IoT Demo</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $("p").click(function(){
+        $(this).hide();
+      });
+    });
+    </script>
+    <script language="JavaScript">
+        function cleanAlerts()
+        {
+            $.post("clearAlerts",null, function(data, status){
+              });
+        }
+    </script>
+</head>
+<style>
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+div {
+  border-radius: 5px;
+  background-color: #f2f2f2;s
+  padding: 20px;
+}
+
+.button {
+  background-color: green; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+.button1 {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+</style>
+<body>
+<div class="w3-main">
+    <!--<h1>IOT Data Services Showcase</h1>-->
+    <h5 class="fa fa-dashboard">IoT Dashboard</h5>
+    <div>
+        <button class="button button1" onclick="cleanAlerts(); return false;">Clear Alerts</button>
+    </div>
+    <hr/>
+    <table>
+        <tr>
+            <td>
+                <div style="width: 140px; height: 140px; background-color: white;">
+                    <canvas  id="myChart"></canvas>
+                </div>
+            </td>
+            <td>
+                <table id="sensorStateCounts">
+                        <tr>
+                            <th>Sensor</th>
+                            <th colspan="3">Overview</th>
+                        </tr>
+                    <tbody id="summariesGroupBySourceTableBody">
+<!--                        <tr><td>Radiation</td><td class="priority0">125</td><td class="priority1">125</td><td class="priority2">125</td></tr>-->
+                    </tbody>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p>
+        Total Sensor # <span id="totalCountText"></span>
+    </p>
+    <!-- =================================== -->
+    <hr/>
+
+    <h1>Alarms</h1>
+    <div>
+        <span  id="alertTotalCountNumber">0</span>
+    </div>
+    <!-- =================================== -->
+    <hr/>
+
+    <div id="mapid" style="width: 400px; height: 400px;"></div>
+
+    <!-- =================================== -->
+    <p>
+        <table class="dataTable">
+            <thead>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Alerts</th>
+            </thead>
+            <tbody id="drawSensorTableTableBody">
+            </tbody>
+        </table>
+
+    </p>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</div>
+
+<script>
+
+    var zoomNumber = 3;
+
+    // Set  create a map of the center of US
+	var mymap = L.map('mapid').setView([35.659807, -97.017174], zoomNumber);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamNiYWxvdSIsImEiOiJja204Y3Z5cjIwa2t1MndwOXhjMGVuMDN0In0.8h6HQJ_uvVKT2k5kVLTz_A', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(mymap);
+
+	//window['V3AKJGEDV0GSGV9577'] = L.marker([33.9478264, -117.867065]);
+	//window['V3AKJGEDV0GSGV9577'].addTo(mymap)
+	//	.bindPopup("<b>Hello world!</b><br />I am a popup.");
+
+
+	var popup = L.popup();
+
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(mymap);
+    }
+
+	mymap.on('click', onMapClick);
+
+</script>
+
+<script language="JavaScript">
+
+
+    // Map Overview Sensor
+    var streamOverviewSource = new EventSource("/streamOverviewEvents-sse");
+    streamOverviewSource.onmessage = function(event) {
+
+      var sensors = JSON.parse(event.data)
+
+      for (const sensor of sensors)
+      {
+        drawSensorOverview(sensor);
+      }
+    };
+
+    function drawSensorTable(sensorOverview)
+    {
+        var rowid = "tableRow"+sensorOverview.id;
+
+        var sensorRow = document.getElementById(rowid);
+        if(sensorRow == null)
+        {
+
+           var sensorDataCells = "<td id='"+rowid+"-name"+"'>"+sensorOverview.sensor.name+"</td>";
+           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-locationName"+"'>"+sensorOverview.sensor.sensorLocation.locationName+"</td>";
+           sensorDataCells = sensorDataCells+"<td id='"+rowid+"-alarmCount"+"'><span class='alertCircle"+sensorOverview.priority+"'>"+sensorOverview.alarmCount+"</span></td>";
+
+           var rowHtml = "<tr id='"+rowid+"'>"+sensorDataCells+"</tr>";
+
+            $("#drawSensorTableTableBody").append(rowHtml);
+        }
+        else
+        {
+            //Update Sensor Row alarmCount
+            document.getElementById(rowid+"-alarmCount").innerHTML = "<span class='alertCircle"+sensorOverview.priority+"'>"+sensorOverview.alarmCount+"</span>";
+        }
+
+    }//---------------------------
+
+    function drawSensorOverview(sensorOverview)
+    {
+
+       //Build Table
+       drawSensorTable(sensorOverview);
+
+        //Update chart
+
+        if(typeof window[sensorOverview.id] !== 'undefined')
+        {
+            window['s'+sensorOverview.id].remove();
+        }
+
+
+        var greenIcon = L.icon({
+            iconUrl: 'img/green.png',
+            iconSize:     [38, 95], // size of the icon
+            shadowSize:   [50, 64], // size of the shadow
+            iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+
+        var sensorColor = 'green';
+
+        if(sensorOverview.priority == 1)
+        {
+            sensorColor = 'orange';
+         }
+         else if(sensorOverview.priority > 1)
+         {
+            sensorColor = 'red';
+         }
+
+         var circleObject = L.circle([sensorOverview.sensor.sensorLocation.latitude, sensorOverview.sensor.sensorLocation.longitude], {
+                    color: sensorColor,
+                    fillColor: sensorColor,
+                    fillOpacity: 0.05,
+                    radius: 50000
+         });
+
+         circleObject.addTo(mymap);
+
+         window['s'+sensorOverview.id] = circleObject;
+
+         //window[sensorOverview.id].addTo(mymap);
+
+    }
+</script>
+
+
+<script>
+    // Charts Totals Count
+    const data = {
+      labels: [
+        'normal',
+        'warning',
+        'severe'
+      ],
+      datasets: [{
+        label: 'Sensor counts',
+        data: [300, 50, 100],
+        backgroundColor: [
+          'green',
+          'orange',
+          'red'
+        ],
+        hoverOffset: 4
+      }]
+    };
+
+    const config = {
+      type: 'doughnut',
+      data: data,
+    };
+
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+
+
+   var conditionSummariesSource = new EventSource("/summaries-sse");
+    conditionSummariesSource.onmessage = function(event) {
+
+      var conditionOverview = JSON.parse(event.data)
+      drawConditionOverview(conditionOverview);
+    };
+
+    function drawConditionOverview(conditionOverview)
+    {
+       myChart.data.datasets[0].data = [
+        conditionOverview.normalCount,
+        conditionOverview.warningCount,
+        conditionOverview.severeCount
+       ];
+
+
+      myChart.update();
+
+       //Update Total
+        var totalCountText =  document.getElementById("totalCountText");
+        totalCountText.innerHTML = conditionOverview.totalCount;
+    }
+    //------------------
+</script>
+
+<script>
+    // summariesGroupBy
+    var summariesGroupBySource = new EventSource("/summariesGroupBy-sse");
+    summariesGroupBySource.onmessage = function(event) {
+
+      var summariesGroupBys = JSON.parse(event.data)
+
+      for (const summariesGroupBy of summariesGroupBys)
+      {
+        drawSummariesGroupBy(summariesGroupBy);
+      }
+
+    };
+
+    function drawSummariesGroupBy(conditionOverview)
+    {
+       var summaryForSensor = document.getElementById("summary-for-"+conditionOverview.label);
+
+      var labelNormalCount = conditionOverview.label+"-normalCount";
+      var labelWarningCount = conditionOverview.label+"-warningCount";
+      var labelSevereCount = conditionOverview.label+"-severeCount";
+
+       if(summaryForSensor != null)
+       {
+          document.getElementById(labelNormalCount).innerHTML = conditionOverview.normalCount;
+          document.getElementById(labelWarningCount).innerHTML = conditionOverview.warningCount;
+          document.getElementById(labelSevereCount).innerHTML = conditionOverview.severeCount;
+       }
+       else
+       {
+            //Add ROW
+            var row = "<tr id='summary-for-"+conditionOverview.label+"'><td>"+conditionOverview.label+"</td><td class='priority0' id='"+labelNormalCount+"'>"+conditionOverview.normalCount+"</td><td class='priority1' id='"+labelWarningCount+"'>"+conditionOverview.warningCount+"</td><td class='priority2' id='"+labelSevereCount+"'>"+conditionOverview.severeCount+"</td></tr>";
+
+            $("#summariesGroupBySourceTableBody").append(row);
+       }
+    }
+</script>
+
+<script>
+    // Alerts Charts
+    const alertChartData = {
+      labels: [ 'Air Quality',
+        'Temperature',
+        'Water Level'
+      ],
+      datasets: [{
+        label: 'Alerts',
+        data: [12,23,100],
+        backgroundColor: [
+        '#F0F8FF',
+          '#7FFFD4',
+          '#00FFFF'
+        ],
+        borderColor: [
+           '#F0F8FF',
+          '#7FFFD4',
+          '#00FFFF'
+        ],
+        borderWidth: 1
+      }]
+    };
+
+
+    const alertChartConfig = {
+  type: 'bar',
+  data: alertChartData,
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  },
+};
+
+  const alertChart = new Chart(
+    document.getElementById('alertChart'),
+    alertChartConfig
+  );
+
+   var alertCountEventsSource = new EventSource("/alertCountEvents-sse");
+
+   alertCountEventsSource.onmessage = function(event) {
+
+        var alertTotalCountNumber = event.data;
+
+       $("#alertTotalCountNumber").html(alertTotalCountNumber);
+
+   };
+
+</script>
+
+
+</body>
+</html>
