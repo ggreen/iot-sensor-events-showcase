@@ -1,0 +1,119 @@
+
+
+hr{
+  border-top: 1px solid gray;
+  max-width: 400px;
+    margin-left: 0;
+}
+
+.dataTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 450px;
+    text-align: left;
+}
+
+.dataTable td, th {
+  padding: 8px;
+}
+
+.dataTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #C0C0C0;
+  color: white;
+}
+.dataTable tr:hover {background-color: #ddd;}
+
+
+#sensorStateCounts {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#sensorStateCounts td, #sensorStateCounts th {
+  padding: 8px;
+}
+
+#sensorStateCounts tr:nth-child(even){background-color: #f2f2f2;}
+
+#sensorStateCounts tr:hover {background-color: #ddd;}
+
+#sensorStateCounts th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #C0C0C0;
+  color: white;
+}
+
+.priority0 {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 50%;
+  font-size: 10px;
+  color: white;
+  text-align: center;
+  background: green
+}
+
+.priority1 {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 50%;
+  font-size: 10px;
+  color: black;
+  text-align: center;
+  background: orange
+}
+
+.priority2 {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 50%;
+  font-size: 10px;
+  color: black;
+  text-align: center;
+  background: red
+}
+
+.alertCircle0 {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+
+  font: 10px Arial, sans-serif;
+  text-align: center;
+  color: white;
+  background: green
+}
+
+.alertCircle1 {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+
+  font: 10px Arial, sans-serif;
+  text-align: center;
+  color: white;
+  background: orange
+}
+
+.alertCircle2 {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+
+  font: 10px Arial, sans-serif;
+  text-align: center;
+  color: white;
+  background: red
+}
