@@ -93,13 +93,13 @@ Generate Cooler Management Alert - with door closed
 
 ```shell
 cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
-java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=1000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{ "id" : "2",  "name" :  "Frozen Food Temperature",  "value" : 36 }'
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=1000 --spring.application.name=generator2DOOR --GENERATOR_TEMPLATE='{ "id" : "2",  "name" :  "Frozen Food Temperature",  "value" : 36 }'
 ```
 
 
 ```shell
 cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
-java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=TEMPERATURE --generator.schedule.rate.ms=1000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{ "id" : "8",  "name" :  "Frozen Food Temperature",  "value" : 36 }'
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=TEMPERATURE --generator.schedule.rate.ms=1000 --spring.application.name=generator8DOOR --GENERATOR_TEMPLATE='{ "id" : "8",  "name" :  "Frozen Food Temperature",  "value" : 36 }'
 ```
 
 Using HTTP Application
