@@ -72,7 +72,7 @@ class GemFireDataLoader(private val sensorOverviewRegion: Region<String, SensorO
 
     private fun save(sensorOverview: SensorOverview) {
 
-        if(sensorOverviewRegion.containsKey(sensorOverview.id))
+        if(sensorOverviewRegion.containsKeyOnServer(sensorOverview.id))
             return
 
 

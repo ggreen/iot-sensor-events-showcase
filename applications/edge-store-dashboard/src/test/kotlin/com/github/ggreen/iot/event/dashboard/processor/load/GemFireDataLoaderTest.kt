@@ -29,7 +29,7 @@ internal class GemFireDataLoaderTest{
     @Test
     internal fun given_regionData_exist_When_run_Then_do_not_put_records() {
 
-        whenever(sensorOverviewRegion.containsKey(any())).thenReturn(true)
+        whenever(sensorOverviewRegion.containsKeyOnServer(any())).thenReturn(true)
 
         val args = null
         subject.run(args)

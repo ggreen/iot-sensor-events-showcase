@@ -7,9 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
+import org.mockito.kotlin.*
 
 internal class SensorGemFireRepositoryTest {
 
@@ -66,6 +64,8 @@ internal class SensorGemFireRepositoryTest {
         assertEquals(expected,actual);
         assertEquals(expectedAlarmCount,expectSensorOverview.alarmCount.toInt())
         assertEquals(expectedPriority,expectSensorOverview.priority)
+
+        verify(region, atLeastOnce())[any()] = any()
 
     }
 }

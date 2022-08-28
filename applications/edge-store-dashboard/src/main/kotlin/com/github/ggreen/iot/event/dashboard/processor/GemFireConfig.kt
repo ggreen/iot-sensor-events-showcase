@@ -59,7 +59,8 @@ class GemFireConfig {
     @Bean("summariesTotal")
     fun summariesTotal(gemFireClient: GemFireClient) : Region<String, ConditionSummaries>
     {
-        return gemFireClient.getRegion<String, ConditionSummaries>("summariesTotal")
+        var region = gemFireClient.getRegion<String, ConditionSummaries>("summariesTotal")
+        return region
     }
 
     @Bean("sensorOverview")
