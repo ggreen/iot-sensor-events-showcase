@@ -30,7 +30,7 @@ class GemFireCqStreamPublisher(
 
         var baseOperation = cqEvent?.baseOperation
 
-        if(!baseOperation?.isUpdate!! && !baseOperation?.isCreate!!)
+        if(!baseOperation!!.isUpdate && !baseOperation.isCreate)
             return //ignore non create/update
 
         var pdxInstance = cqEvent?.newValue as PdxInstance

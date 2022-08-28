@@ -19,7 +19,7 @@ class GemFireDataLoader(private val sensorOverviewRegion: Region<String, SensorO
         var sensorOverview = SensorOverview()
         sensorOverview.id = "1"
         sensorOverview.sensor = Sensor()
-        sensorOverview.sensor!!.name = "Milk Food Temperature"
+        sensorOverview.sensor!!.name = "Milk Temperature"
         sensorOverview.sensor!!.sensorLocation = SensorLocation()
         sensorOverview.sensor!!.sensorLocation!!.locationName = "Aisle ${sensorOverview.id}"
         save(sensorOverview)
@@ -33,7 +33,7 @@ class GemFireDataLoader(private val sensorOverviewRegion: Region<String, SensorO
 
         sensorOverview.id = "3"
         sensorOverview.sensor = Sensor()
-        sensorOverview.sensor!!.name = "Juice Food Temperature"
+        sensorOverview.sensor!!.name = "Juice Temperature"
         sensorOverview.sensor!!.sensorLocation = SensorLocation()
         sensorOverview.sensor!!.sensorLocation!!.locationName = "Aisle ${sensorOverview.id}"
         save(sensorOverview)
@@ -67,6 +67,13 @@ class GemFireDataLoader(private val sensorOverviewRegion: Region<String, SensorO
         sensorOverview.sensor!!.sensorLocation!!.locationName = "Aisle ${sensorOverview.id}"
         save(sensorOverview)
 
+
+        sensorOverview.id = "8"
+        sensorOverview.sensor = Sensor()
+        sensorOverview.sensor!!.name = "Frozen Food Temperature"
+        sensorOverview.sensor!!.sensorLocation = SensorLocation()
+        sensorOverview.sensor!!.sensorLocation!!.locationName = "Aisle ${sensorOverview.id}"
+        save(sensorOverview)
 
     }
 

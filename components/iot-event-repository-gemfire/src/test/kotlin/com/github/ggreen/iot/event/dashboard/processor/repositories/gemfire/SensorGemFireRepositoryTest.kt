@@ -53,8 +53,6 @@ internal class SensorGemFireRepositoryTest {
         expectSensorOverview.alarmCount = 3
         expectSensorOverview.priority = 3
 
-        var sensorOverviews = arrayOf(expectSensorOverview,expectSensorOverview)
-
         val expectedKeys = setOf<String>("A","B")
         whenever(region.keySetOnServer()).thenReturn(expectedKeys)
         whenever(region[any()]).thenReturn(expectSensorOverview)

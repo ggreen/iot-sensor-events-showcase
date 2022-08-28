@@ -34,8 +34,8 @@ class SensorGemFireRepository(
 
             count++
 
-            sensorOverview!!.alarmCount = alarmCount.toLong()
-            sensorOverview!!.priority = priority
+            sensorOverview.alarmCount = alarmCount.toLong()
+            sensorOverview.priority = priority
 
 
             this.sensorOverviewRegion[key] = sensorOverview

@@ -8,6 +8,7 @@ create region --name=Properties --type=PARTITION_PERSISTENT
 create region --name=SensorMeasurement --type=PARTITION
 create region --name=FloorAssociateAlert --type=PARTITION
 create region --name=CoolerMgmtAlert  --type=PARTITION
+create region --name=sensorOverview   --type=PARTITION
 ```
 
 Start SCDF
@@ -25,28 +26,7 @@ cd /Users/devtools/integration/scdf
 ```
 
 ```shell
-app register --name rstream-filter --type processor --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/gemfire-oql-filter-rabbit-stream-processor/build/libs/gemfire-oql-filter-rabbit-stream-processor-0.0.2-SNAPSHOT.jar
+script --file /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/deployments/local/scdf/app_install.scdf
 ```
-
-```shell
-app register --name rstream-filter --type sink --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/gemfire-oql-filter-rabbit-stream-processor/build/libs/gemfire-oql-filter-rabbit-stream-processor-0.0.2-SNAPSHOT.jar
-```
-
-```shell
-app register --name rstream-jdbc --type sink --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/jdbc-batch-upsert-rabbit-stream-sink/build/libs/jdbc-batch-upsert-rabbit-stream-sink-0.0.1-SNAPSHOT.jar
-```
-
-```shell
-app register --name rstream-query --type source --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/rabbit-stream-gemfire-cq-processor/build/libs/rabbit-stream-gemfire-cq-processor-0.0.2-SNAPSHOT.jar
-```
-
-```shell
-app register --name rstream-query --type processor --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/rabbit-stream-gemfire-cq-processor/build/libs/rabbit-stream-gemfire-cq-processor-0.0.2-SNAPSHOT.jar
-```
-
-```shell
-app register --name gemfire --type sink --uri file:///Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase/applications/gemfire-stream-sink/build/libs/gemfire-stream-sink-0.0.2-SNAPSHOT.jar
-```
-
 
 

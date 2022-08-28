@@ -37,5 +37,6 @@ class GeneratorAppRunner(
         val msg : MqttMessage = MqttMessage(output.toByteArray(StandardCharsets.UTF_8))
 
         client.publish(topic,msg)
+        logger.info("Sent message $output")
     }
 }

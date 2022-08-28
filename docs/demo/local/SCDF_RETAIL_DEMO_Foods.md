@@ -25,6 +25,7 @@ open http://localhost:7070/pulse/dataBrowser.html
 ```
 
 
+
 ```shell
 select * from /FloorAssociateAlert
 
@@ -35,8 +36,8 @@ select * from /CoolerMgmtAlert
 ## Retail
 
 ```shell
-FROZEN_FOOD_STREAM=rstream-query --gemfire.cq.oql="select * from /SensorMeasurement where name = 'FROZEN_FOOD_TEMPERATURE' and value > 35" --rabbitmq.stream.out="SensorMeasurementAlert" | rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 1" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="FLOOR_ASSOCIATE_ALERT" | gemfire --rabbitmq.stream.in="FLOOR_ASSOCIATE_ALERT" --gemfire.region.name=FloorAssociateAlert
-FROZEN_FOOD_COOLER_MGMT=:FROZEN_FOOD_STREAM.rstream-query > rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 0" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="COOLER_MGMT_ALERT" | gemfire --rabbitmq.stream.in="COOLER_MGMT_ALERT"  --gemfire.region.name=CoolerMgmtAlert
+FROZEN_FOOD_STREAM=rstream-query --gemfire.cq.oql="select * from /SensorMeasurement where name = 'Frozen Food Temperature' and value > 35" --rabbitmq.stream.out="SensorMeasurementAlert" | rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 1" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="FLOOR_ASSOCIATE_ALERT" | gemfire --rabbitmq.stream.in="FLOOR_ASSOCIATE_ALERT" --gemfire.region.name=FloorAssociateAlert | gf-sensor-analyzer --sensor.update.isAlarm=false --rabbitmq.stream.in="FLOOR_ASSOCIATE_ALERT" 
+FROZEN_FOOD_COOLER_MGMT=:FROZEN_FOOD_STREAM.rstream-query > rstream-filter --filter.query="select * from /SensorMeasurement where id = '?{id}|DOOR' and value = 0" --rabbitmq.stream.in="SensorMeasurementAlert" --rabbitmq.stream.out="COOLER_MGMT_ALERT" | gemfire --rabbitmq.stream.in="COOLER_MGMT_ALERT"  --gemfire.region.name=CoolerMgmtAlert | gf-sensor-analyzer --sensor.update.isAlarm=true --rabbitmq.stream.in="COOLER_MGMT_ALERT"
 ```
 
 
@@ -53,14 +54,18 @@ rabbitmqctl -n rabbit  set_parameter shovel FLOOR_ASSOCIATE_ALERT \
 ```
 
 
-Door open testing with RabbitMQ Management UI
+Door closed
 
-```json
-{
-"id" : "2|DOOR",
-"name" :  "FROZEN_FOOD_DOOR",
-"value" : 1
-}
+
+```shell
+cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=10000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{ "id" : "2|DOOR", "name" :  "Frozen Food Temperature",  "value" : 0 }'
+```
+Door open
+
+```shell
+cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=10000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{ "id" : "8|DOOR", "name" :  "Frozen Food Temperature",  "value" : 1 }'
 ```
 
 Sensor measurement are cached in GemFire
@@ -69,25 +74,32 @@ Sensor measurement are cached in GemFire
 select * from /SensorMeasurement
 ```
 
-Good
+Edge App
+
+```shell
+java -jar applications/edge-store-dashboard/build/libs/edge-store-dashboard-0.0.1-SNAPSHOT.jar 
+```
 
 ```json
-{
-"id" : "2|REFRIG",
-"name" :  "FROZEN_FOOD_TEMPERATURE",
-"value" : 11
-}
+
+cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=1000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{"id" : "2|REFRIG","name" :  "Frozen Food Temperature", "value" : 11}'
+
 
 ```
 
 
-Generate Cooler Management Alert - with door open
-```json
-{
-"id" : "2",
-"name" :  "FROZEN_FOOD_TEMPERATURE",
-"value" : 36
-}
+Generate Cooler Management Alert - with door closed
+
+```shell
+cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=1000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{ "id" : "2",  "name" :  "Frozen Food Temperature",  "value" : 36 }'
+```
+
+
+```shell
+cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=TEMPERATURE --generator.schedule.rate.ms=1000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{ "id" : "8",  "name" :  "Frozen Food Temperature",  "value" : 36 }'
 ```
 
 Using HTTP Application
@@ -128,7 +140,7 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -d '{
 "id" : "2",
-"name" :  "FROZEN_FOOD_TEMPERATURE",
+"name" :  "Frozen Food Temperature",
 "value" : 36
 }'
 ```
