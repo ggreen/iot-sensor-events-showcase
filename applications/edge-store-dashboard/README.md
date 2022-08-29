@@ -12,8 +12,8 @@ create region --name=sensorOverview --type=PARTITION
 
 
 ```shell
-cd applications/edge-store-dashboard
-gradle bootBuildImage
+gradle :applications:edge-store-dashboard:bootBuildImage
+
 docker tag edge-store-dashboard:0.0.1-SNAPSHOT cloudnativedata/edge-store-dashboard:0.0.1-SNAPSHOT
 docker push cloudnativedata/edge-store-dashboard:0.0.1-SNAPSHOT
 ```
