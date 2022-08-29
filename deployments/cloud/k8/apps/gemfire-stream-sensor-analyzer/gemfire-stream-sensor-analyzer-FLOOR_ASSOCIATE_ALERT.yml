@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run:  gemfire-stream-sensor-analyzer
+  name:  gemfire-stream-sensor-analyzer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name:  gemfire-stream-sensor-analyzer
+  template:
+    metadata:
+      labels:
+        name:  gemfire-stream-sensor-analyzer
+    spec:
+      containers:
+        - env:
+          - name: gemfire.locators
+            valueFrom:
+              configMapKeyRef:
+                name: gemfire1-config
+                key: locators
+          - name: rabbitmq.host
+            value: "rabbitmq"
+          - name: rabbitmq.stream.in
+            value: "FLOOR_ASSOCIATE_ALERT"
+          - name: sensor.update.isAlarm
+            value: "false"
+          - name: rabbitmq.username
+            valueFrom:
+              secretMapKeyRef:
+                name: rabbitmq-default-user
+                key: username
+          - name: rabbitmq.password
+            valueFrom:
+              secretMapKeyRef:
+                name: rabbitmq-default-user
+                key: password
+          image: cloudnativedata/gemfire-stream-sensor-analyzer:0.0.2-SNAPSHOT
+          name: account-rest-service
+#          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always

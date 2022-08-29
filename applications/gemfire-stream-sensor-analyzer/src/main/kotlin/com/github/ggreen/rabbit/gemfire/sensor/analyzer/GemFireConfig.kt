@@ -34,10 +34,6 @@ class GemFireConfig {
             .build();
     }
 
-//    @Bean
-//    fun isAlarm(@Value("\${sensor.update.isAlarm}")isAlarmProperty : String ) : Boolean{
-//        return isAlarmProperty.toBoolean()
-//    }
     @Bean
     fun sensorOverviewRegion(geodeClient: GemFireClient) : Region<String, SensorOverview>
     {

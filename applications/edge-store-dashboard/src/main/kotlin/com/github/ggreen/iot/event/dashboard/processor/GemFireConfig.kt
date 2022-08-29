@@ -24,7 +24,7 @@ class GemFireConfig {
     @Value("\${spring.application.name}")
     private var applicationName: String = "gemfire-stream-sink"
 
-    @Value("\${gemfire.locators:gemfire.locator}")
+    @Value("\${gemfire.locators}")
     private var locators: String = "localhost[10334]"
 
 
@@ -69,20 +69,4 @@ class GemFireConfig {
         return gemFireClient.getRegion<String, SensorOverview>("sensorOverview")
     }
 
-//    @Bean
-//    fun sensorGemFireRepository(sensorOverviewRegion: Region<String, SensorOverview>) : SensorGemFireRepository
-//    {
-//        return SensorGemFireRepository(sensorOverviewRegion)
-//    }
-
-//    @Bean
-//    fun alertRepository(queryService: QuerierService) : AlertGemFireRepository
-//    {
-//        return AlertGemFireRepository(queryService)
-//    }
-
-//    fun conditionSummaryRepository() : ConditionSummaryRepository
-//    {
-//        return ConditionSummaryGemFireRepository()
-//    }
 }

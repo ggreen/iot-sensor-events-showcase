@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: edge-store-dashboard
+    run:  edge-store-dashboard
+  name:  edge-store-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name:  edge-store-dashboard
+  template:
+    metadata:
+      labels:
+        name:  edge-store-dashboard
+    spec:
+      containers:
+        - env:
+            - name: gemfire.locators
+              valueFrom:
+                configMapKeyRef:
+                  name: gemfire1-config
+                  key: locators
+          - name: server.port
+            value: "8080"
+          image: cloudnativedata/edge-store-dashboard:0.0.1-SNAPSHOT
+          name: edge-store-dashboard
+#          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edge-store-dashboard
+spec:
+  selector:
+    name: edge-store-dashboard
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
