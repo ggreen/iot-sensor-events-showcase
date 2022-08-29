@@ -44,7 +44,7 @@ internal class SensorGemFireRepositoryTest {
 
     @Test
     fun updateAllSensorOverviewAlarmCounts() {
-        val expected = 2
+        val expectedUpdateCount = 2
         val expectedAlarmCount = 10
         val expectedPriority : Short = 10
 
@@ -59,8 +59,9 @@ internal class SensorGemFireRepositoryTest {
 
         var actual = subject.updateAllSensorOverviewAlarmCounts(expectedAlarmCount,expectedPriority)
 
-        assertEquals(expected,actual);
+        assertEquals(expectedUpdateCount,actual);
         assertEquals(expectedAlarmCount,expectSensorOverview.alarmCount.toInt())
+        assertEquals(expectedAlarmCount,expectSensorOverview.warningCount.toInt())
         assertEquals(expectedPriority,expectSensorOverview.priority)
 
         verify(region, atLeastOnce())[any()] = any()

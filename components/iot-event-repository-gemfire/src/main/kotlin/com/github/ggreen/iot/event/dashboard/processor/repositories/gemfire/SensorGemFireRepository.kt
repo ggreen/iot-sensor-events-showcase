@@ -20,7 +20,7 @@ class SensorGemFireRepository(
     }
 
 
-    override fun updateAllSensorOverviewAlarmCounts(alarmCount: Int, priority: Short): Int {
+    override fun updateAllSensorOverviewAlarmCounts(sensorAlarmAndWarningCount: Int, priority: Short): Int {
 
         val keys = sensorOverviewRegion.keySetOnServer()
         var sensorOverview : SensorOverview?
@@ -34,7 +34,8 @@ class SensorGemFireRepository(
 
             count++
 
-            sensorOverview.alarmCount = alarmCount.toLong()
+            sensorOverview.alarmCount = sensorAlarmAndWarningCount.toLong()
+            sensorOverview.warningCount = sensorAlarmAndWarningCount.toLong()
             sensorOverview.priority = priority
 
 
