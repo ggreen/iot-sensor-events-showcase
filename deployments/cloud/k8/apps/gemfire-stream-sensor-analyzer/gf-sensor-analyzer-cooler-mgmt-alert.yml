@@ -2,17 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run:  gemfire-stream-sensor-analyzer
-  name:  gemfire-stream-sensor-analyzer
+    run: gf-sensor-analyzer-cooler-mgmt-alert
+  name:  gf-sensor-analyzer-cooler-mgmt-alert
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name:  gemfire-stream-sensor-analyzer
+      name:  gf-sensor-analyzer-cooler-mgmt-alert
   template:
     metadata:
       labels:
-        name:  gemfire-stream-sensor-analyzer
+        name:  gf-sensor-analyzer-cooler-mgmt-alert
     spec:
       containers:
         - env:
@@ -22,22 +22,22 @@ spec:
                 name: gemfire1-config
                 key: locators
           - name: rabbitmq.host
-            value: "rabbitmq"
+            value: "rabbit"
           - name: rabbitmq.stream.in
-            value: "FLOOR_ASSOCIATE_ALERT"
+            value: "COOLER_MGMT_ALERT"
           - name: sensor.update.isAlarm
-            value: "false"
+            value: "true"
           - name: rabbitmq.username
             valueFrom:
-              secretMapKeyRef:
-                name: rabbitmq-default-user
+              secretKeyRef:
+                name: rabbit-default-user
                 key: username
           - name: rabbitmq.password
             valueFrom:
-              secretMapKeyRef:
-                name: rabbitmq-default-user
+              secretKeyRef:
+                name: rabbit-default-user
                 key: password
-          image: cloudnativedata/gemfire-stream-sensor-analyzer:0.0.2-SNAPSHOT
+          image: cloudnativedata/gemfire-stream-sensor-analyzer:0.0.1-SNAPSHOT
           name: account-rest-service
 #          imagePullPolicy: IfNotPresent
           imagePullPolicy: Always

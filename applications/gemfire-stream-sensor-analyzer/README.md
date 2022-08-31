@@ -39,7 +39,7 @@ Not Alert
 ```shell
 
 ```shell
-gradle :applications:rabbit-stream-gemfire-cq-processor:bootBuildImage
-docker tag rabbit-stream-gemfire-cq-processor:0.0.1-SNAPSHOT cloudnativedata/rabbit-stream-gemfire-cq-processor:0.0.1-SNAPSHOT
-docker push cloudnativedata/rabbit-stream-gemfire-cq-processor:0.0.1-SNAPSHOT
+gradle :applications:gemfire-stream-sensor-analyzer:bootBuildImage
+docker tag gemfire-stream-sensor-analyzer:0.0.1-SNAPSHOT cloudnativedata/gemfire-stream-sensor-analyzer:0.0.1-SNAPSHOT
+docker push cloudnativedata/gemfire-stream-sensor-analyzer:0.0.1-SNAPSHOT
 ```

@@ -1,15 +1,13 @@
-VMware Explore
+# IoT Sensor Events Showcase
 
-- https://event.vmware.com/flow/vmware/explore2022us/content/page/catalog?tab.contentcatalogtabs=1627421929827001vRXW&search=2799
 
-Deck?
+The project showcases RabbitMQ, GemFire, and Spring Boot based realtime analytics applications on the Edge.
+It also uses Spring Cloud Data Flow to configure rules for analytics based alerts.
 
-Time for demo? 10 minutes
+This repository has been showcase for the following conferences
 
-Flow
+- [VMware Explore](https://event.vmware.com/flow/vmware/explore2022us/content/page/catalog?tab.contentcatalogtabs=1627421929827001vRXW&search=2799)
 
-- RabbitMQ and GemFire and Realtime Analytics Applications on Edge
-- Configured alerts Beef Re
 
 
 Open RabbitMQ Management UI 
@@ -77,15 +75,13 @@ select * from /SensorMeasurement
 Edge App
 
 ```shell
+cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
 java -jar applications/edge-store-dashboard/build/libs/edge-store-dashboard-0.0.1-SNAPSHOT.jar 
 ```
 
 ```json
-
 cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
-java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=1000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{"id" : "2|REFRIG","name" :  "Frozen Food Temperature", "value" : 11}'
-
-
+java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.0.1-SNAPSHOT.jar --generator.mqtt.topic=DOOR --generator.schedule.rate.ms=1000 --spring.application.name=generatorDOOR --GENERATOR_TEMPLATE='{"id" : "2","name" :  "Frozen Food Temperature", "value" : 11}'
 ```
 
 
@@ -105,9 +101,6 @@ java -jar applications/generator-mqtt-source/build/libs/generator-mqtt-source-0.
 Using HTTP Application
 
 
-```shell
-java -jar /Users/Projects/VMware/Tanzu/TanzuData/TanzuRabbitMQ/dev/tanzu-rabbitmq-event-streaming-showcase/applications/http-amqp-source/target/http-amqp-source-0.0.2-SNAPSHOT.jar --server.port=7777
-```
 
 ```shell
 open http://localhost:7777

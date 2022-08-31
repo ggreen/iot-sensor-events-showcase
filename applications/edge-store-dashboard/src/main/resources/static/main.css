@@ -86,9 +86,9 @@ hr{
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    padding: 2px;
+    padding: 8px;
 
-  font: 10px Arial, sans-serif;
+  font: 12px Arial, sans-serif;
   text-align: center;
   color: white;
   background: green
@@ -98,9 +98,9 @@ hr{
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    padding: 2px;
+    padding: 8px;
 
-  font: 10px Arial, sans-serif;
+  font: 12px Arial, sans-serif;
   text-align: center;
   color: white;
   background: orange
@@ -110,9 +110,9 @@ hr{
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    padding: 2px;
+    padding: 8px;
 
-  font: 10px Arial, sans-serif;
+  font: 12px Arial, sans-serif;
   text-align: center;
   color: white;
   background: red

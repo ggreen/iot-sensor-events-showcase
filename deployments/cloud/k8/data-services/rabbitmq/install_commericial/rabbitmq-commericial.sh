@@ -149,6 +149,12 @@ else
 fi
 
 echo "INSTALLING CLUSTERS MONITOR..."
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+# helm search repo prometheus | grep stack
+helm install --generate-name prometheus-community/kube-prometheus-stack
+sleep 10
 $kubectl apply --filename https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/observability/prometheus/monitors/rabbitmq-servicemonitor.yml
 echo "INSTALLING OPERATORS MONITOR..."
 $kubectl apply --filename https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/observability/prometheus/monitors/rabbitmq-cluster-operator-podmonitor.yml

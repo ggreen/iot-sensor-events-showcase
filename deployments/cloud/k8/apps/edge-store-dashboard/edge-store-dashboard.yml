@@ -17,16 +17,16 @@ spec:
     spec:
       containers:
         - env:
-            - name: gemfire.locators
-              valueFrom:
-                configMapKeyRef:
-                  name: gemfire1-config
-                  key: locators
+          - name: gemfire.locators
+            valueFrom:
+              configMapKeyRef:
+                name: gemfire1-config
+                key: locators
           - name: server.port
             value: "8080"
           image: cloudnativedata/edge-store-dashboard:0.0.1-SNAPSHOT
           name: edge-store-dashboard
-#          imagePullPolicy: Always
+          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
