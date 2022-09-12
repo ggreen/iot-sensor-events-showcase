@@ -54,6 +54,12 @@ rabbitmqctl -n rabbit  set_parameter shovel FLOOR_ASSOCIATE_ALERT \
 
 Door closed
 
+Add Binding
+
+```
+amq.topic  queue: SensorMeasurement -> key: #
+```
+
 
 ```shell
 cd /Users/Projects/VMware/Tanzu/Use-Cases/IoT/dev/iot-sensor-events-showcase
