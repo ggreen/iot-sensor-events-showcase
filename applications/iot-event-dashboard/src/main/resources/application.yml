@@ -1,0 +1,5 @@
+spring:
+  config.import: optional:http://localhost:8888
+  cloud:
+    config:
+      enabled: false

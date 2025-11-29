@@ -1,23 +1,27 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-	id("org.springframework.boot") version "2.7.1"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.6.21"
-	kotlin("plugin.spring") version "1.6.21"
-	kotlin("plugin.jpa") version "1.6.21"
+  kotlin("jvm") version "2.2.21"
+  kotlin("plugin.spring") version "2.2.21"
+  id("org.springframework.boot") version "4.0.0"
+  id("io.spring.dependency-management") version "1.1.7"
+  kotlin("plugin.jpa") version "2.2.21"
 }
 
 group = "com.github.ggreen"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
 
 repositories {
 	mavenCentral()
 	mavenLocal()
 }
 
-extra["springCloudVersion"] = "2021.0.3"
+extra["springCloudVersion"] = "2025.1.0"
 
 dependencies {
 
@@ -30,9 +34,13 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	runtimeOnly("org.postgresql:postgresql")
-	implementation("com.rabbitmq:stream-client-sac:0.6.0-SNAPSHOT")
+    implementation("org.springframework.cloud:spring-cloud-stream-binder-rabbit")
+    runtimeOnly("org.postgresql:postgresql")
+//	implementation("com.rabbitmq:stream-client-sac:0.6.0-SNAPSHOT")
 
 	implementation("com.github.nyla-solutions:nyla.solutions.core:1.5.0")
+    implementation("org.springframework.amqp:spring-rabbit-stream")
+    implementation("org.springframework.cloud:spring-cloud-stream")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
@@ -54,13 +62,19 @@ dependencyManagement {
 	}
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
-	}
+kotlin {
+  compilerOptions {
+    freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
+  }
+}
+
+allOpen {
+  annotation("jakarta.persistence.Entity")
+  annotation("jakarta.persistence.MappedSuperclass")
+  annotation("jakarta.persistence.Embeddable")
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform()
+  useJUnitPlatform()
 }
+

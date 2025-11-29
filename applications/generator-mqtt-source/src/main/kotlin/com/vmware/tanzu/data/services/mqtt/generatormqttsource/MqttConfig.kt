@@ -47,7 +47,7 @@ class MqttConfig {
 
     @Bean("template")
     fun template() : String{
-        return Config.getProperty("GENERATOR_TEMPLATE")
+        return Config.settings().getProperty("GENERATOR_TEMPLATE")
     }
 
 }
