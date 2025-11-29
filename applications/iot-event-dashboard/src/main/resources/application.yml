@@ -1,5 +1,38 @@
 spring:
-  config.import: optional:http://localhost:8888
+  import: optional:configserver:http://localhost:8888
   cloud:
     config:
       enabled: false
+  flyway:
+    locations: classpath:/db/migration
+    #
+logging:
+  level:
+    org.flywaydb: DEBUG
+server.port: 8080
+#The Following end points used a k8 Readiness probbe
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info
+#  flyway:
+#    baselineOnMigrate: true
+#    url: jdbc:postgresql://localhost:5432/postgres
+#    user: postgres
+#    password: postgres
+#  r2dbc:
+#    url:
+#    username: postgres
+#    password: security
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+  application:
+    name: iot-event-dashboard
+#  host: localhost
+#  database: postgres
+#  username: postgres
+#  password: security
