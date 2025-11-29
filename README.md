@@ -4,8 +4,7 @@ This is a demo application that showcases an IoT use case with [RabbitMQ](https:
 [Spring](https://spring.io/), [GemFire](https://tanzu.vmware.com/gemfire) and [Postgres](https://tanzu.vmware.com/postgres).
 
 
-
-![concept.png](docs/img/concept.png)
+![dashboard.png](docs/img/dashboard.png)
 
 This code has been used in the following presentations
 
